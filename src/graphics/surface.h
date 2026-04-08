@@ -21,6 +21,7 @@ public:
     virtual void setData(ImageInfo textureInfo, void* data) = 0;
     virtual int32_t getWidth() const = 0;
     virtual int32_t getHeight() const = 0;
+    virtual int32_t getPitch() const = 0;
     virtual void bind() = 0;
     virtual void unbind() = 0;
     virtual void* getHandle() const = 0;

@@ -23,6 +23,7 @@ public:
     void* getData() const override;
     int32_t getWidth() const override;
     int32_t getHeight() const override;
+    int32_t getPitch() const override;
     void bind() override {}
     void unbind() override {}
     void* getHandle() const override { return nullptr; }

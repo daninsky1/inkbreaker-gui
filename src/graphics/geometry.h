@@ -5,8 +5,6 @@
 #include <concepts>
 #include <cinttypes>
 
-#include <boost/operators.hpp>
-
 namespace gfx
 {
 

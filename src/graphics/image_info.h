@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cassert>
+#include <cstddef>
 
 #include "geometry.h"
 #include "color.h"
@@ -19,7 +20,6 @@ constexpr size_t bytesPerPixel(ColorType colorType) noexcept
         return 4;
     default:
         assert(false);
-        return 0;
     }
 }
 
