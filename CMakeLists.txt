@@ -34,8 +34,8 @@ set(SOURCES
         src/container.h
         src/flex_container.cpp
         src/flex_container.h
-        src/Center.cpp
-        src/Center.h
+        src/center.cpp
+        src/center.h
         src/align.cpp
         src/align.h
         src/padding.cpp
@@ -74,6 +74,7 @@ add_executable(inkbreaker_gui_test src/main.cpp ${SOURCES})
 target_include_directories(inkbreaker_gui_test PRIVATE src)
 # Add this flag to your target's compile options
 target_compile_options(inkbreaker_gui_test PRIVATE -g -fsanitize=address -fno-omit-frame-pointer)
+target_link_options(inkbreaker_gui_test PRIVATE -fsanitize=address)
 
 add_executable(workbench tests/workbench.cpp ${SOURCES})
 target_include_directories(workbench PRIVATE src)
