@@ -47,7 +47,7 @@ int32_t Blend2DSurface::getHeight() const
     return _blImage.height();
 }
 int32_t Blend2DSurface::getPitch() const {
-    return sizeof(uint32_t) * _blImage.width();
+    return static_cast<int32_t>(_blImageData.stride);
 }
 
 void Blend2DSurface::writeToFile(std::string fileName)
