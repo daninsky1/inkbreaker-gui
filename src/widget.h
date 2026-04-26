@@ -22,6 +22,17 @@ namespace ui
  * It provides an interface for event handling, layout calculation, and rendering,
  * which must be implemented by subclasses.
  *
+ * ## Writing a Widget subclass
+ *
+ * There are three common child models for Widgets:
+ * * Leaf widget object, with no children: The LeafWidget class handles this case.
+ * * A single child: The SingleChildWidget class handles this case.
+ * * A list of children: The MultiChildWidget class handles this case.
+ *
+ * Sometimes, however, a widget object's child model is more complicated. Maybe
+ * it has a two-dimensional array of children. Maybe it features multiple lists.
+ * In such situations, the corresponding Widget needs to be subclassed of Widget.
+ *
  * @note Subclasses must override the pure virtual methods:
  *       - layout()
  *       - render()
@@ -114,6 +125,9 @@ protected:
     bool _needsUpdate = true;                   // Indicates if the widget needs to be updated and redrawn
 };
 
+/**
+ * A Widget that has no Widget child
+ */
 class LeafWidget : public Widget
 {
 public:
@@ -122,7 +136,7 @@ private:
 
 
 /**
- * SingleChildWidget is a widget that can have only one child widget.
+ * A Widget that has a unique Widget child
  */
 class SingleChildWidget : public Widget
 {
@@ -137,7 +151,7 @@ protected:
 
 
 /**
- * MultiChildWidget is a widget that can have multiple child widgets.
+ * A Widget that has multiple child widgets
  */
 class MultiChildWidget : public Widget
 {
