@@ -10,10 +10,6 @@
 #include <utility>
 #include <vector>
 
-#include <include/core/SkImageInfo.h>
-#include <include/core/SkSurface.h>
-#include <include/core/SkColor.h>
-
 #include "geometry.h"
 
 namespace  gfx

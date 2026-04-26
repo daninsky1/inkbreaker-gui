@@ -29,6 +29,6 @@ protected:
 /**
  * UnconstrainedBox OVerflowBox is basically the same type here, unless
  */
-typedef UnconstrainedBox OVerflowBox;
+typedef UnconstrainedBox OverflowBox;
 
 } // ui

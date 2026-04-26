@@ -26,7 +26,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
     return SDL_APP_CONTINUE;
 }
 
-SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *sdlEvent)
+SDL_AppResult SDL_AppEvent(void *appstate, const SDL_Event *sdlEvent)
 {
     ui::Event event;
     event.sdlEvent = *sdlEvent; // Copy the SDL event to our Event structure
@@ -41,15 +41,15 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *sdlEvent)
 
 SDL_AppResult SDL_AppIterate(void* appstate)
 {
-    uint64_t startTime = SDL_GetTicks(); // Get the current time in milliseconds
+    const uint64_t startTime = SDL_GetTicks();
     rootWindow->update();
     rootWindow->render(nullptr, {0, 0}); // Render the root window
 
-    uint64_t elapsedTime = SDL_GetTicks() - startTime; // Calculate elapsed time
+    const uint64_t elapsedTime = SDL_GetTicks() - startTime; // Calculate elapsed time
 
-    // SDL_Log("Delta time: %ums", elapsedTime);
+    // Delay to maintain target FPS
     if (elapsedTime < FRAME_DURATION_MS) {
-        SDL_Delay(FRAME_DURATION_MS - elapsedTime); // Delay to maintain target FPS
+        SDL_Delay(FRAME_DURATION_MS - elapsedTime);
     }
     return SDL_APP_CONTINUE;
 }
