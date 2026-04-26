@@ -26,12 +26,12 @@ class Align : public SingleChildWidget
 public:
     Align();
     Size layout(const BoxConstraints& constraint) override;
-    void render(gfx::Renderer* renderer, Position offset) override;
+    void render(BLContext& context, Position offset) override;
 
-    void setColor(gfx::Color color) { _color = color; }
+    void setColor(BLRgba32 color) { _color = color; }
     void setAlignment(const Alignment alignment) { _alignment = alignment; }
 protected:
-    gfx::Color _color = gfx::Colors::WHITE;
+    BLRgba32 _color = Colors::WHITE;
     Alignment _alignment = Alignment::Center;
 };
 

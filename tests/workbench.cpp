@@ -10,26 +10,19 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <blend2d.h>
 
-#include "ui/framework.h"
-#include "ui/window.h"
-#include "ui/layout.h"
+#include "framework.h"
 #include "graphics/geometry.h"
-#include "graphics/render.h"
-#include "graphics/renderer.h"
-#include "graphics/paint.h"
-
-using Shapes = std::vector<gfx::Shape>;
 
 constexpr int W_WIDTH = 800, W_HEIGHT = 600;
 constexpr SDL_WindowFlags W_FLAGS = SDL_WINDOW_OPENGL;
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
-std::shared_ptr<gfx::Surface> surface = nullptr;
 SDL_Surface* sdlSurface = nullptr;
 SDL_Surface* sdlWindowSurface = nullptr;
-auto skImageInfo = SkImageInfo::MakeN32Premul(W_WIDTH, W_HEIGHT);
-static Shapes shapes;
+BLImage image;
+BLImageData imageData{};
 
 void sdlCheckOK(bool ok)
 {
@@ -45,8 +38,6 @@ void sdlCheckPtr(void* ptr)
     }
 }
 
-gfx::Renderer* render = nullptr;
-
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
 {
     sdlCheckOK(
@@ -54,10 +45,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
                                        W_FLAGS, &window, &renderer)
     );
 
-    gfx::ImageInfo textureInfo{.dimension = {W_WIDTH, W_HEIGHT}};
-    surface = gfx::Surface::create(textureInfo);
-
-    render = gfx::Renderer::create();
+    image = BLImage(W_WIDTH, W_HEIGHT, BL_FORMAT_PRGB32);
+    image.getData(&imageData);
 
     sdlSurface = SDL_CreateSurface(W_WIDTH, W_HEIGHT,SDL_PIXELFORMAT_ARGB8888);
     sdlCheckPtr(sdlSurface);
@@ -78,9 +67,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *sdlEvent)
             sdlSurface = SDL_CreateSurface(W_WIDTH, W_HEIGHT,SDL_PIXELFORMAT_ARGB8888);
             sdlCheckPtr(sdlSurface);
         }
-        gfx::ImageInfo textureInfo{.dimension = {W_WIDTH, W_HEIGHT}};
-        surface = gfx::Surface::create(textureInfo);
-        render->bindRenderTarget(surface);
+        image = BLImage(W_WIDTH, W_HEIGHT, BL_FORMAT_PRGB32);
+        image.getData(&imageData);
         sdlWindowSurface = SDL_GetWindowSurface(window);
         break;
     }
@@ -97,16 +85,11 @@ void BL_TEST();
 SDL_AppResult SDL_AppIterate(void* appstate)
 {
     uint64_t startTime = SDL_GetTicks(); // Get the current time in milliseconds
-    render->bindRenderTarget(surface);
 
-    gfx::Rect rect{0, 0, W_WIDTH, W_HEIGHT};
-    gfx::Paint paint{};
-    gfx::Color color{0, 255, 0, 255};
-    paint.setColor(color);
-
-    render->drawRect(rect, paint);
-
-    render->releaseRenderTarget();
+    BLContext context(image);
+    context.fillRect(BLRectI{0, 0, W_WIDTH, W_HEIGHT}, BLRgba32{0, 255, 0, 255});
+    context.end();
+    image.getData(&imageData);
 
     // surface->writeToFile("teste.png");
 
@@ -114,7 +97,7 @@ SDL_AppResult SDL_AppIterate(void* appstate)
 
     // return SDL_APP_SUCCESS;
 
-    sdlSurface->pixels = surface->getData();
+    sdlSurface->pixels = imageData.pixelData;
 
     SDL_Surface* testSurface = SDL_CreateSurface(W_WIDTH, W_HEIGHT,SDL_PIXELFORMAT_RGBA8888);
     if (!testSurface) {

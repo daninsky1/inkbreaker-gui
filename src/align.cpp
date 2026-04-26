@@ -71,25 +71,21 @@ Size Align::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Align::render(gfx::Renderer* renderer, Position offset)
+void Align::render(BLContext& context, Position offset)
 {
 
-    renderer->save();
+    context.save();
 
-    renderer->translate(offset.x, offset.y);
+    context.translate(offset.x, offset.y);
 
-    renderer->clipRect(gfx::Rect{_size.width, _size.height});
+    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
 
-    gfx::Paint paint;
-    paint.setStyle(gfx::Style::FILL_STYLE);
-    paint.setColor(_color);
+    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
 
-    renderer->drawRect(gfx::Rect{0, 0, _size.width, _size.height}, paint);
-
-    renderer->restore();
+    context.restore();
 
     if (_child != nullptr) {
-        _child->render(renderer, _childPosition.add(offset));
+        _child->render(context, _childPosition.add(offset));
     }
 }
 

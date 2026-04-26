@@ -4,8 +4,6 @@
 
 #include "text.h"
 
-#include "graphics/font.h"
-
 namespace ui {
 
 Text::Text(std::string value)
@@ -19,26 +17,24 @@ Size Text::layout(const BoxConstraints& boxConstraints)
     return _size;
 }
 
-void Text::render(gfx::Renderer* renderer, Position offset)
+void Text::render(BLContext& context, Position offset)
 {
-    renderer->save();
-    renderer->translate(offset.x, offset.y);
-    renderer->clipRect(gfx::Rect{_size.width, _size.height});
+    context.save();
+    context.translate(offset.x, offset.y);
+    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
+    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _backgoundColor);
 
-    gfx::Paint paint = gfx::Paint::create()
-        .setStyle(gfx::Style::FILL_STYLE)
-        .setColor(_backgoundColor);
-    renderer->drawRect(gfx::Rect{0, 0, _size.width, _size.height}, paint);
-
-    std::shared_ptr<gfx::Typeface> typeface = gfx::Typeface::createFromFile(_fontFilepath);
-    std::shared_ptr<gfx::Font> font = gfx::Font::createFromTypeface(typeface, 24.0f);
+    BLFontFace fontFace;
+    fontFace.createFromFile(_fontFilepath.c_str());
+    BLFont font;
+    font.createFromFace(fontFace, static_cast<float>(_fontSize));
 
     
 
     // TODO(Daniel S): Renderizar texto
 
 
-    renderer->restore();
+    context.restore();
 }
 
 } // ui

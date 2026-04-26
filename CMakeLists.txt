@@ -46,28 +46,8 @@ set(SOURCES
         src/unconstrained_box.h
         src/text.cpp
         src/text.h
+        src/render_types.h
         src/graphics/geometry.h
-        src/graphics/renderer.cpp
-        src/graphics/renderer.h
-        src/graphics/blend2d/blend2d_renderer.cpp
-        src/graphics/blend2d/blend2d_renderer.h
-        src/graphics/surface.cpp
-        src/graphics/surface.h
-        src/graphics/blend2d/blend2d_surface.cpp
-        src/graphics/blend2d/blend2d_surface.h
-        src/graphics/image_info.cpp
-        src/graphics/image_info.h
-        src/graphics/paint.cpp
-        src/graphics/paint.h
-        src/graphics/color.h
-        src/graphics/contexts.h
-        src/graphics/render.h
-        src/graphics/blend2d/blend2d_utils.cpp
-        src/graphics/blend2d/blend2d_utils.h
-        src/graphics/font.h
-        src/graphics/blend2d/blend2d_font.cpp
-        src/graphics/blend2d/blend2d_font.h
-        src/graphics/font.cpp
 )
 
 add_executable(inkbreaker_gui_test src/main.cpp ${SOURCES})

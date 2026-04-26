@@ -58,10 +58,10 @@ Size LimitedBox::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void LimitedBox::render(gfx::Renderer* renderer, Position offset)
+void LimitedBox::render(BLContext& context, Position offset)
 {
     if (_child != nullptr) {
-        _child->render(renderer, _childPosition.add(offset));
+        _child->render(context, _childPosition.add(offset));
     }
 }
 

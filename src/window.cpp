@@ -25,17 +25,8 @@ void Window::setRenderSurface()
         return;
     }
 
-    gfx::ImageInfo info{.dimension = {w, h}};
-    _surface = gfx::Surface::create(info);
-    if (_renderer == nullptr) {
-        _renderer = gfx::Renderer::create();
-    } else {
-        delete _renderer;
-        _renderer = gfx::Renderer::create();
-    }
-    _renderer->releaseRenderTarget();
-    _renderer->bindRenderTarget(_surface);
-    _renderer->clear(_color);
+    _image = BLImage(w, h, BL_FORMAT_PRGB32);
+    _image.getData(&_imageData);
 
     if (_texture != nullptr) {
         SDL_DestroyTexture(_texture);
@@ -53,16 +44,24 @@ void Window::setRenderSurface()
     }
 }
 
-void Window::render(gfx::Renderer* renderer, Position offset)
+void Window::render(BLContext& context, Position offset)
 {
+    (void)context;
+    (void)offset;
+
     if (_child == nullptr) {
         SDL_Log("No child widget to render.");
         return;
     }
-    _renderer->clear(_color);
-    _child->render(_renderer, {0, 0});
 
-    if (!SDL_UpdateTexture(_texture, nullptr, _surface->getData(), _surface->getPitch())) {
+    BLContext childContext(_image);
+    childContext.fillAll(_color);
+    _child->render(childContext, {0, 0});
+    childContext.end();
+
+    _image.getData(&_imageData);
+
+    if (!SDL_UpdateTexture(_texture, nullptr, _imageData.pixelData, static_cast<int>(_imageData.stride))) {
         SDL_Log("Failed to update texture: %s", SDL_GetError());
         return;
     }

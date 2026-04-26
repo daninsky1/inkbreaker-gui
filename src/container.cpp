@@ -41,26 +41,21 @@ Size Container::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Container::render(gfx::Renderer* renderer, Position offset)
+void Container::render(BLContext& context, Position offset)
 {
-    renderer->save();
+    context.save();
 
-    renderer->translate(offset.x, offset.y);
+    context.translate(offset.x, offset.y);
 
     // Define o retângulo de clipping do container
-    renderer->clipRect(gfx::Rect{0, 0, _size.width, _size.height});
-
-    gfx::Paint paint;
-    paint.setStyle(gfx::Style::FILL_STYLE);
-    paint.setColor(_backgroundColor);
-
-    renderer->drawRect(gfx::Rect{0, 0, _size.width, _size.height}, paint);
+    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
+    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _backgroundColor);
 
     // Restaura o estado anterior do renderer
-    renderer->restore();
+    context.restore();
 
     if (_child != nullptr) {
-        _child->render(renderer, offset.add(_padding.left, _padding.top));
+        _child->render(context, offset.add(_padding.left, _padding.top));
     }
 }
 } // namespace ui

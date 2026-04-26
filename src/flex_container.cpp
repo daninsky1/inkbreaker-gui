@@ -4,14 +4,14 @@
 
 namespace ui
 {
-void FlexContainer::render(gfx::Renderer* renderer, Position offset)
+void FlexContainer::render(BLContext& context, Position offset)
 {
     switch (_flexDirection) {
     case css::FlexDirection::Row:
         SDL_Log("Rendering FlexContainer in Row direction");
         for (auto &child : _children) {        
             if (child) {
-                child->render(renderer, {0, 0});
+                child->render(context, {0, 0});
             }
             // absX += child->getWidth();
         }
@@ -26,7 +26,7 @@ void FlexContainer::render(gfx::Renderer* renderer, Position offset)
         for (size_t i = (_children.size() - 1); i > 0; i--) {        
             auto &child = _children[i];
             if (child) {
-                child->render(renderer, {0, 0});
+                child->render(context, {0, 0});
             }
             // absX += child->getWidth();
         }

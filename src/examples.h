@@ -47,7 +47,7 @@ inline ui::Window* runExample(ui::Widget* widget)
 inline ui::Widget* example1()
 {
     const auto container = new ui::Container();
-    container->setColor(gfx::Colors::RED);
+    container->setColor(ui::Colors::RED);
     return container;
 }
 
@@ -60,7 +60,7 @@ inline ui::Widget* example1()
 inline ui::Widget* example2()
 {
     auto container = new ui::Container();
-    container->setColor(gfx::Colors::RED);
+    container->setColor(ui::Colors::RED);
     container->setSize({200, 200});
 
     return container;
@@ -78,11 +78,11 @@ inline ui::Widget* example2()
 inline ui::Widget* example3()
 {
     auto container = new ui::Container();
-    container->setColor(gfx::Colors::RED);
+    container->setColor(ui::Colors::RED);
     container->setSize({200, 200});
 
     auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*container);
 
     return center;
@@ -100,11 +100,11 @@ inline ui::Widget* example3()
 inline ui::Widget* example4()
 {
     const auto container = new ui::Container();
-    container->setColor(gfx::Colors::RED);
+    container->setColor(ui::Colors::RED);
     container->setSize({200, 200});
 
     const auto align = new ui::Align();
-    align->setColor(gfx::Colors::GRAY);
+    align->setColor(ui::Colors::GRAY);
     align->setAlignment(ui::Alignment::BottomRight);
     align->setChild(*container);
 
@@ -123,11 +123,11 @@ inline ui::Widget* example4()
 inline ui::Widget* example5()
 {
     const auto container = new ui::Container();
-    container->setColor(gfx::Colors::RED);
+    container->setColor(ui::Colors::RED);
     container->setSize({std::numeric_limits<int32_t>::max(), std::numeric_limits<int32_t>::max()});
 
     const auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*container);
 
     return center;
@@ -150,10 +150,10 @@ inline ui::Widget* example5()
 inline ui::Widget* example6()
 {
     const auto container = new ui::Container();
-    container->setColor(gfx::Colors::RED);
+    container->setColor(ui::Colors::RED);
 
     const auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*container);
 
     return center;
@@ -167,14 +167,14 @@ inline ui::Widget* example7()
 {
     const auto greenContainer = new ui::Container();
     greenContainer->setSize({60, 60});
-    greenContainer->setColor(gfx::Colors::GREEN);
+    greenContainer->setColor(ui::Colors::GREEN);
 
     const auto container = new ui::Container();
-    container->setColor(gfx::Colors::RED);
+    container->setColor(ui::Colors::RED);
     container->setChild(*greenContainer);
 
     const auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*container);
 
     return center;
@@ -184,15 +184,15 @@ inline ui::Widget* example8()
 {
     const auto greenContainer = new ui::Container();
     greenContainer->setSize({60, 60});
-    greenContainer->setColor(gfx::Colors::GREEN);
+    greenContainer->setColor(ui::Colors::GREEN);
 
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setPadding({30, 30, 30, 30});
     redContainer->setChild(*greenContainer);
 
     const auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*redContainer);
 
     return center;
@@ -201,7 +201,7 @@ inline ui::Widget* example8()
 inline ui::Widget* example9()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
 
     const auto constrainedBox = new ui::ConstrainedBox{
         {.minWidth = 70, .minHeight = 70, .maxWidth = 150, .maxHeight = 150},
@@ -213,7 +213,7 @@ inline ui::Widget* example9()
 inline ui::Widget* example10()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setSize({.width = 10, .height = 10});
 
     const auto constrainedBox = new ui::ConstrainedBox{
@@ -222,7 +222,7 @@ inline ui::Widget* example10()
     };
 
     const auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*constrainedBox);
 
     return center;
@@ -231,7 +231,7 @@ inline ui::Widget* example10()
 inline ui::Widget* example11()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setSize({.width = 1000, .height = 1000});
 
     const auto constrainedBox = new ui::ConstrainedBox{
@@ -240,7 +240,7 @@ inline ui::Widget* example11()
         };
 
     const auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*constrainedBox);
 
     return center;
@@ -249,7 +249,7 @@ inline ui::Widget* example11()
 inline ui::Widget* example12()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setSize({.width = 100, .height = 100});
 
     const auto constrainedBox = new ui::ConstrainedBox{
@@ -258,7 +258,7 @@ inline ui::Widget* example12()
             };
 
     const auto center = new ui::Center();
-    center->setColor(gfx::Colors::GRAY);
+    center->setColor(ui::Colors::GRAY);
     center->setChild(*constrainedBox);
 
     return center;
@@ -273,7 +273,7 @@ inline ui::Widget* example12()
 inline ui::Widget* example13()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setSize({.width = 40, .height = 100});
 
     const auto unconstrainedBox = new ui::UnconstrainedBox{
@@ -306,7 +306,7 @@ inline ui::Widget* example13()
 inline ui::Widget* example14()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setSize({.width = 4000, .height = 100});
 
     const auto unconstrainedBox = new ui::UnconstrainedBox{
@@ -337,7 +337,7 @@ inline ui::Widget* example14()
 inline ui::Widget* example15()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setSize({.width = 4000, .height = 100});
 
     const auto unconstrainedBox = new ui::OverflowBox{
@@ -370,14 +370,14 @@ inline ui::Widget* example15()
 inline ui::Widget* example16()
 {
     const auto blackContainer = new ui::Container();
-    blackContainer->setColor(gfx::Colors::BLACK);
+    blackContainer->setColor(ui::Colors::BLACK);
     return blackContainer;
 }
 
 inline ui::Widget* example17()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::RED);
+    redContainer->setColor(ui::Colors::RED);
     redContainer->setSize({.width = 4000, .height = 100});
 
     
@@ -392,7 +392,7 @@ inline ui::Widget* example17()
 inline ui::Widget* example18()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -400,7 +400,7 @@ inline ui::Widget* example18()
 inline ui::Widget* example19()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -408,7 +408,7 @@ inline ui::Widget* example19()
 inline ui::Widget* example20()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -416,7 +416,7 @@ inline ui::Widget* example20()
 inline ui::Widget* example21()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -424,7 +424,7 @@ inline ui::Widget* example21()
 inline ui::Widget* example22()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -432,7 +432,7 @@ inline ui::Widget* example22()
 inline ui::Widget* example23()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -440,7 +440,7 @@ inline ui::Widget* example23()
 inline ui::Widget* example24()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -448,7 +448,7 @@ inline ui::Widget* example24()
 inline ui::Widget* example25()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -456,7 +456,7 @@ inline ui::Widget* example25()
 inline ui::Widget* example26()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -464,7 +464,7 @@ inline ui::Widget* example26()
 inline ui::Widget* example27()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -472,7 +472,7 @@ inline ui::Widget* example27()
 inline ui::Widget* example28()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -480,7 +480,7 @@ inline ui::Widget* example28()
 inline ui::Widget* example29()
 {
     const auto redContainer = new ui::Container();
-    redContainer->setColor(gfx::Colors::BLACK);
+    redContainer->setColor(ui::Colors::BLACK);
     redContainer->setSize({.width = 40, .height = 50});
     return redContainer;
 }
@@ -489,7 +489,7 @@ inline ui::Widget* textExample1()
 {
     auto* text = new ui::Text("Hello, World!");
     auto* center = new ui::Center();
-    center->setColor(gfx::Colors::BLACK);
+    center->setColor(ui::Colors::BLACK);
     center->setChild(*text);
     return center;
 }

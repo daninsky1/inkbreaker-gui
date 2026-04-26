@@ -6,7 +6,7 @@
 
 #include "events.h"
 #include "layout.h"
-#include "graphics/renderer.h"
+#include "render_types.h"
 
 namespace ui
 {
@@ -82,20 +82,20 @@ public:
     virtual Size layout(const BoxConstraints& boxConstraints) = 0;
 
     /**
-     * Renders the widget onto the given Skia canvas.
+     * Renders the widget onto the given Blend2D context.
      *
      * This method should be overridden by concrete subclasses to perform
-     * custom drawing logic using the provided `SkCanvas` instance.
+     * custom drawing logic using the provided `BLContext` instance.
      *
      * The `offsetX` and `offsetY` parameters represent the absolute position
      * offset of the widget relative to its parent or the root canvas. These
      * offsets should be applied to ensure correct placement of the widget in
      * the render tree.
      *
-     * @param renderer  The Skia canvas to draw onto.
+     * @param context The Blend2D context to draw onto.
      * @param offset The offset to apply during rendering.
      */
-    virtual void render(gfx::Renderer* renderer, Position offset) = 0;
+    virtual void render(BLContext& context, Position offset) = 0;
 protected:
     Widget() { }
     virtual ~Widget() = default;

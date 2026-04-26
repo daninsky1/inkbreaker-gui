@@ -26,7 +26,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
     return SDL_APP_CONTINUE;
 }
 
-SDL_AppResult SDL_AppEvent(void *appstate, const SDL_Event *sdlEvent)
+SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *sdlEvent)
 {
     ui::Event event;
     event.sdlEvent = *sdlEvent; // Copy the SDL event to our Event structure
@@ -43,7 +43,8 @@ SDL_AppResult SDL_AppIterate(void* appstate)
 {
     const uint64_t startTime = SDL_GetTicks();
     rootWindow->update();
-    rootWindow->render(nullptr, {0, 0}); // Render the root window
+    BLContext context;
+    rootWindow->render(context, {0, 0}); // Render the root window
 
     const uint64_t elapsedTime = SDL_GetTicks() - startTime; // Calculate elapsed time
 
