@@ -16,6 +16,7 @@ public:
     Window(std::string title, int32_t w, int32_t h, SDL_WindowFlags flags);
     ~Window() override = default;
 
+    void setMinimumSize(int32_t width, int32_t height);
     void update() const;
 
     Event& eventHandler(Event& event) override;

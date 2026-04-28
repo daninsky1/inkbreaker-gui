@@ -10,24 +10,53 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
-#include "framework.h"
+#include "calculator.h"
 #include "examples.h"
-#include "window.h"
+#include "framework.h"
 #include "layout.h"
+#include "window.h"
 
-static ExampleApp* rootWindow = nullptr;
+constexpr int W_WIDTH = 360;
+constexpr int W_HEIGHT = 540;
+constexpr int W_MIN_WIDTH = 320;
+constexpr int W_MIN_HEIGHT = 480;
+constexpr int W_FLAGS = SDL_WINDOW_RESIZABLE;
+
+static ui::Window* rootWindow = nullptr;
+
+static bool assertWindow()
+{
+    if (rootWindow == nullptr) {
+        SDL_Log("There is no root window defined.");
+        return false;
+    }
+    return true;
+}
+
+static ui::Window* createExamples() {
+    auto* window = new ExampleApp();
+    window->setCurrentExemple(0);
+    return window;
+}
+
+static ui::Window* createCalculator() {
+    auto* window = new ui::Window("Calculator", W_WIDTH, W_HEIGHT, W_FLAGS);
+    window->setMinimumSize(W_MIN_WIDTH, W_MIN_HEIGHT);
+    auto* calculator = new CalculatorWidget();
+    window->setChild(*calculator);
+    return window;
+}
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv)
 {
-    rootWindow = new ExampleApp();
-    rootWindow->setCurrentExemple(0);
-    ui::BoxSpace boxSpace{.top = 0, .left = 0 , .bottom = 0, .right = 0};
-
+    rootWindow = createCalculator();
     return SDL_APP_CONTINUE;
 }
 
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *sdlEvent)
 {
+    if (!assertWindow()) { return SDL_APP_FAILURE; }
+
     ui::Event event;
     event.sdlEvent = *sdlEvent; // Copy the SDL event to our Event structure
 
@@ -41,6 +70,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *sdlEvent)
 
 SDL_AppResult SDL_AppIterate(void* appstate)
 {
+    if (!assertWindow()) { return SDL_APP_FAILURE; }
+
     const uint64_t startTime = SDL_GetTicks();
     rootWindow->update();
     BLContext context;

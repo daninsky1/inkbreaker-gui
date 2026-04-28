@@ -46,7 +46,18 @@ Size Button::layout(const BoxConstraints& boxConstraints)
         };
     }
 
-    return normalize(boxConstraints);
+    const Size normalizedSize = normalize(boxConstraints);
+
+    if (_child != nullptr) {
+        const int32_t contentWidth = std::max(0, _size.width - horizontalPadding);
+        const int32_t contentHeight = std::max(0, _size.height - verticalPadding);
+        _childPosition = {
+            .x = _padding.left + std::max(0, (contentWidth - childSize.width) / 2),
+            .y = _padding.top + std::max(0, (contentHeight - childSize.height) / 2)
+        };
+    }
+
+    return normalizedSize;
 }
 
 void Button::render(BLContext& context, Position offset)

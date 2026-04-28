@@ -92,7 +92,16 @@ struct BoxConstraints {
     int32_t maxWidth = 0;
     int32_t maxHeight = 0;
 
-    Size clamp(Size& size) const {
+    [[nodiscard]] static BoxConstraints tight(const Size& size) {
+        return {
+            .minWidth = size.width,
+            .minHeight = size.height,
+            .maxWidth = size.width,
+            .maxHeight = size.height
+        };
+    }
+
+    Size clamp(const Size& size) const {
         return {
             .width = std::clamp(size.width, minWidth, std::max(minWidth, maxWidth)),
             .height = std::clamp(size.height, minHeight, std::max(minHeight, maxHeight))

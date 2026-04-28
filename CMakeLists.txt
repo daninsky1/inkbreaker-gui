@@ -48,6 +48,10 @@ set(SOURCES
         src/text.h
         src/button.cpp
         src/button.h
+        src/grid.cpp
+        src/grid.h
+        src/calculator.cpp
+        src/calculator.h
         src/overlay.cpp
         src/overlay.h
         src/render_types.h

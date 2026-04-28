@@ -44,6 +44,13 @@ void Window::setRenderSurface()
     }
 }
 
+void Window::setMinimumSize(int32_t width, int32_t height)
+{
+    if (!SDL_SetWindowMinimumSize(_window, width, height)) {
+        SDL_Log("Failed to set window minimum size: %s", SDL_GetError());
+    }
+}
+
 void Window::render(BLContext& context, Position offset)
 {
     (void)context;
@@ -102,7 +109,7 @@ Event& Window::eventHandler(Event& event)
         int h = sdlEvent.window.data2;
         SDL_Log("Window resized to %d x %d", w, h);
         _size = Size(w, h);
-        _boxConstraints = BoxConstraints(w, h, w, h);
+        _boxConstraints = BoxConstraints::tight(_size);
         setRenderSurface();
         event.handled = true; // Mark the event as handled
         return event;
