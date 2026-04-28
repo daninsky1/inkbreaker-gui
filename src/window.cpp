@@ -82,6 +82,21 @@ Event& Window::eventHandler(Event& event)
     // Handle events specific to the window, e.g., resizing, closing, etc.
     SDL_Event sdlEvent = event.sdlEvent;
     switch (sdlEvent.type) {
+    case SDL_EVENT_MOUSE_MOTION:
+        event.hasPosition = true;
+        event.position = {
+            .x = static_cast<int32_t>(sdlEvent.motion.x),
+            .y = static_cast<int32_t>(sdlEvent.motion.y)
+        };
+        break;
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+    case SDL_EVENT_MOUSE_BUTTON_UP:
+        event.hasPosition = true;
+        event.position = {
+            .x = static_cast<int32_t>(sdlEvent.button.x),
+            .y = static_cast<int32_t>(sdlEvent.button.y)
+        };
+        break;
     case SDL_EVENT_WINDOW_RESIZED: {
         int w = sdlEvent.window.data1;
         int h = sdlEvent.window.data2;

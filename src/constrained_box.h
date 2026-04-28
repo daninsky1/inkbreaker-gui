@@ -11,7 +11,9 @@ class ConstrainedBox : public SingleChildWidget {
 public:
     ConstrainedBox(BoxConstraints boxConstraints, Widget* child) {
         _boxConstraints = boxConstraints;
-        _child = child;
+        if (child != nullptr) {
+            setChild(*child);
+        }
     }
 
     Size layout(const BoxConstraints& boxConstraints);

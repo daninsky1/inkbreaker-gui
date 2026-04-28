@@ -14,11 +14,15 @@
 #include "align.h"
 #include "constrained_box.h"
 #include "text.h"
+#include "button.h"
+#include "overlay.h"
 #include "unconstrained_box.h"
 
 constexpr int W_WIDTH = 800;
 constexpr int W_HEIGHT = 600;
 constexpr int W_FLAGS = SDL_WINDOW_RESIZABLE;
+
+static int exampleCounter = 0;
 
 /**
  * These examples mimics some Flutter behaviors and examples.
@@ -494,6 +498,53 @@ inline ui::Widget* textExample1()
     return center;
 }
 
+inline ui::Widget* buttonExample1()
+{
+    auto* label = new ui::Text("Click me");
+    auto* button = new ui::Button(*label);
+    button->setOnPressed([label] {
+        exampleCounter++;
+        label->setValue(std::format("Clicked {} times", exampleCounter));
+    });
+
+    auto* center = new ui::Center();
+    center->setColor(ui::Colors::BLACK);
+    center->setChild(*button);
+    return center;
+}
+
+inline ui::Widget* counterButtonExample()
+{
+    auto* counterLabel = new ui::Text("0");
+    counterLabel->setFontSize(64);
+
+    auto* plusLabel = new ui::Text("+");
+    plusLabel->setFontSize(32);
+    plusLabel->setColor(ui::Colors::WHITE);
+
+    auto* button = new ui::Button(*plusLabel);
+    button->setOnPressed([counter = int32_t{0}, counterLabel] mutable {
+        ++counter;
+        counterLabel->setValue(std::to_string(counter));
+    });
+
+    auto* center = new ui::Center();
+    center->setColor(ui::Colors::BLACK);
+    center->setChild(*counterLabel);
+
+    auto* buttonPadding = new ui::Padding();
+    buttonPadding->setPadding({8, 18, 30, 30});
+    buttonPadding->setColor(ui::Colors::TRANSPARENT);
+    buttonPadding->setChild(*button);
+
+    auto* bottomRight = new ui::Align();
+    bottomRight->setColor(ui::Colors::TRANSPARENT);
+    bottomRight->setAlignment(ui::Alignment::BottomRight);
+    bottomRight->setChild(*buttonPadding);
+
+    return new ui::Overlay({center, bottomRight});
+}
+
 class ExampleApp : public ui::Window
 {
 public:
@@ -530,7 +581,9 @@ public:
             "27",
             "28",
             "29",
-            "Text 01"
+            "Text 01",
+            "Button 01",
+            "Counter Button"
         };
         SDL_SetWindowTitle(_window, std::format("Examples. {}", examplesDescriptions[0]).c_str());
         examples = {
@@ -563,15 +616,14 @@ public:
             example27(),
             example28(),
             example29(),
-            textExample1()
+            textExample1(),
+            buttonExample1(),
+            counterButtonExample()
         };
         _child = examples[currentExample];
     }
 
     ui::Event& eventHandler(ui::Event& event) override {
-        event = Window::eventHandler(event);
-        if (event.handled) return event;
-
         SDL_Event sdlEvent = event.sdlEvent;
         switch (sdlEvent.type) {
         case SDL_EVENT_KEY_DOWN: {
@@ -595,7 +647,11 @@ public:
         default:
             break;   // Ignore unhandled events.;
         }
-        return event;
+        if (event.handled) {
+            return event;
+        }
+
+        return Window::eventHandler(event);
     }
 
     void setCurrentExemple(int index) {

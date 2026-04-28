@@ -46,6 +46,10 @@ set(SOURCES
         src/unconstrained_box.h
         src/text.cpp
         src/text.h
+        src/button.cpp
+        src/button.h
+        src/overlay.cpp
+        src/overlay.h
         src/render_types.h
         src/graphics/geometry.h
 )

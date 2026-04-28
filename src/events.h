@@ -4,11 +4,15 @@
 
 #include <SDL3/SDL_events.h>
 
+#include "layout.h"
+
 namespace ui
 {
 struct Event {
     SDL_Event sdlEvent; // Type of the event (e.g., SDL_EVENT_QUIT, SDL_EVENT_KEYDOWN, etc.)
     bool handled = false; // Indicates if the event has been handled
+    bool hasPosition = false; // True when `position` contains pointer coordinates.
+    Position position = {0, 0}; // Local position for the widget currently handling the event.
 };
 
 // void eventDispatcher(Event& event)

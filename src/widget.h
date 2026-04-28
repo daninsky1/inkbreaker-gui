@@ -143,10 +143,16 @@ class SingleChildWidget : public Widget
 public:
     SingleChildWidget& setChild(Widget& child);
     Widget* getChild();
+    Event& eventHandler(Event& event) override;
 protected:
     virtual ~SingleChildWidget() = default;
+    bool hitTestChild(Position position) const;
+    Event& dispatchEventToChild(Event& event);
+
     Widget* _child = nullptr; // Pointer to the single child widget
     Position _childPosition = Position{0, 0};
+    bool _childPointerInside = false;
+    bool _childPointerActive = false;
 };
 
 

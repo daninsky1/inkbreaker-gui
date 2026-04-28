@@ -14,6 +14,10 @@ class Text : public LeafWidget {
 public:
     Text(std::string value);
 
+    void setValue(std::string value) { _value = std::move(value); markNeedsUpdate(); }
+    void setColor(BLRgba32 color) { _color = color; }
+    void setFontSize(int32_t fontSize) { _fontSize = fontSize; }
+    void setFontFilepath(std::string filepath) { _fontFilepath = std::move(filepath); }
     Size layout(const BoxConstraints& boxConstraints) override;
     void render(BLContext& context, Position offset) override;
 private:

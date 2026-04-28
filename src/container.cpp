@@ -23,6 +23,8 @@ BoxSpace Container::getPadding() const
 Size Container::layout(const BoxConstraints& constraint)
 {
     if (_child != nullptr) {
+        _childPosition = { .x = _padding.left, .y = _padding.top };
+
         // Assumes the size of the child
         _size = _child->layout(constraint);
     } else if (!_size.hasSize()) {
@@ -55,7 +57,7 @@ void Container::render(BLContext& context, Position offset)
     context.restore();
 
     if (_child != nullptr) {
-        _child->render(context, offset.add(_padding.left, _padding.top));
+        _child->render(context, offset.add(_childPosition));
     }
 }
 } // namespace ui

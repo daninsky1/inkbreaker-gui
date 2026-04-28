@@ -17,7 +17,9 @@ public:
             .maxWidth =  std::numeric_limits<int32_t>::max(),
             .maxHeight = std::numeric_limits<int32_t>::max()
         };
-        _child = child;
+        if (child != nullptr) {
+            setChild(*child);
+        }
     }
 
     Size layout(const BoxConstraints& boxConstraints) override;

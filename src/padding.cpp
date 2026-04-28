@@ -18,19 +18,21 @@ Padding::Padding(uint32_t top, uint32_t left, uint32_t bottom, uint32_t right)
 
 Size Padding::layout(const BoxConstraints& constraint)
 {
-    // Reduz as constraints disponíveis para o filho
+    const int32_t horizontalPadding = _padding.left + _padding.right;
+    const int32_t verticalPadding = _padding.top + _padding.bottom;
+
     BoxConstraints childConstraint = {
-        .minWidth = std::max(0, constraint.minWidth > (_padding.left + _padding.right)
-                             ? constraint.minWidth - (_padding.left + _padding.right)
+        .minWidth = std::max(0, constraint.minWidth > horizontalPadding
+                             ? constraint.minWidth - horizontalPadding
                              : 0),
-        .minHeight = std::max(0, constraint.minHeight > (_padding.top + _padding.bottom)
-                              ? constraint.minHeight - (_padding.top + _padding.bottom)
+        .minHeight = std::max(0, constraint.minHeight > verticalPadding
+                              ? constraint.minHeight - verticalPadding
                               : 0),
-        .maxWidth = constraint.maxWidth > (_padding.left + _padding.right)
-                    ? constraint.maxWidth - (_padding.left + _padding.right)
+        .maxWidth = constraint.maxWidth > horizontalPadding
+                    ? constraint.maxWidth - horizontalPadding
                     : 0,
-        .maxHeight = constraint.maxHeight > (_padding.top + _padding.bottom)
-                     ? constraint.maxHeight - (_padding.top + _padding.bottom)
+        .maxHeight = constraint.maxHeight > verticalPadding
+                     ? constraint.maxHeight - verticalPadding
                      : 0
     };
 
@@ -38,19 +40,30 @@ Size Padding::layout(const BoxConstraints& constraint)
     if (_child != nullptr) {
         childSize = _child->layout(childConstraint);
 
-        // Posiciona o filho com offset do padding
         _childPosition = { .x = _padding.left, .y = _padding.top };
     }
 
-    // O próprio tamanho do Padding inclui o filho + padding
-    return {
-        .width = childSize.width + _padding.left + _padding.right,
-        .height = childSize.height + _padding.top + _padding.bottom
+    _size = {
+        .width = childSize.width + horizontalPadding,
+        .height = childSize.height + verticalPadding
     };
+    return normalize(constraint);
 }
 
 void Padding::render(BLContext& context, Position offset)
 {
+    if (_size.width <= 0 || _size.height <= 0) {
+        return;
+    }
 
+    context.save();
+    context.translate(offset.x, offset.y);
+    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
+    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
+    context.restore();
+
+    if (_child != nullptr) {
+        _child->render(context, offset.add(_childPosition));
+    }
 }
 } // ui

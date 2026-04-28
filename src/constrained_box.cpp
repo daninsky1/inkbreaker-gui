@@ -11,6 +11,7 @@ Size ConstrainedBox::layout(const BoxConstraints& boxConstraints)
 {
     BoxConstraints tightened = _boxConstraints.tighten(boxConstraints);
     if (_child != nullptr) {
+        _childPosition = {0, 0};
         _size = _child->layout(tightened);
     }
     return normalize(boxConstraints);
@@ -19,7 +20,7 @@ Size ConstrainedBox::layout(const BoxConstraints& boxConstraints)
 void ConstrainedBox::render(BLContext& context, Position offset)
 {
     if (_child != nullptr) {
-        _child->render(context, offset);
+        _child->render(context, offset.add(_childPosition));
     }
 }
 
