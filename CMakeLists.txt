@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(InkBreakerGUI VERSION 0.1.0 LANGUAGES CXX)
+project(InkBreakerGUI VERSION 0.1.0 LANGUAGES C CXX)
 
 # Add this line near the top of your CMakeLists.txt, after 'project()'
 # This sets the CMAKE_MSVC_RUNTIME_LIBRARY variable to statically link the C++ runtime.
@@ -65,6 +65,13 @@ target_include_directories(workbench PRIVATE src)
 
 add_dependencies(inkbreaker_gui_test copy_resources)
 
+add_library(tinyexpr STATIC vendor/tinyexpr/tinyexpr.c)
+add_library(tinyexpr::tinyexpr ALIAS tinyexpr)
+target_include_directories(tinyexpr PUBLIC vendor/tinyexpr)
+if (UNIX)
+        target_link_libraries(tinyexpr PUBLIC m)
+endif()
+
 include(FetchContent)
 
 # SDL 3
@@ -75,6 +82,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SDL3)
 target_link_libraries(inkbreaker_gui_test PRIVATE SDL3::SDL3-static)
+target_link_libraries(inkbreaker_gui_test PRIVATE tinyexpr::tinyexpr)
 
 # Boost
 set(Boost_INCLUDE_DIRS "C:/Users/daniel/dev/boost_1_88_0")
@@ -95,4 +103,5 @@ target_link_libraries(inkbreaker_gui_test PRIVATE blend2d::blend2d)
 # Executável de testes
 target_link_libraries(workbench PRIVATE SDL3::SDL3)
 target_include_directories(workbench PRIVATE ${Boost_INCLUDE_DIRS})
+target_link_libraries(workbench PRIVATE tinyexpr::tinyexpr)
 target_link_libraries(workbench PRIVATE blend2d::blend2d)

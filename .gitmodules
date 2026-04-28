@@ -4,3 +4,6 @@
 [submodule "vendor/asmjit"]
 	path = vendor/asmjit
 	url = https://github.com/asmjit/asmjit
+[submodule "vendor/tinyexpr"]
+	path = vendor/tinyexpr
+	url = https://github.com/codeplea/tinyexpr
