@@ -8,39 +8,18 @@
 
 #include <SDL3/SDL_video.h>
 
-#include "widget.h"
-#include "container.h"
-#include "center.h"
 #include "align.h"
-#include "constrained_box.h"
-#include "text.h"
 #include "button.h"
+#include "center.h"
+#include "constrained_box.h"
+#include "container.h"
 #include "overlay.h"
+#include "text.h"
 #include "unconstrained_box.h"
-
-constexpr int W_WIDTH = 800;
-constexpr int W_HEIGHT = 600;
-constexpr int W_FLAGS = SDL_WINDOW_RESIZABLE;
+#include "widget.h"
+#include "window.h"
 
 static int exampleCounter = 0;
-
-/**
- * These examples mimics some Flutter behaviors and examples.
- * https://docs.flutter.dev/ui/layout/constraints
- *
- * @param widget
- * @return
- */
-inline ui::Window* runExample(ui::Widget* widget)
-{
-    const auto window = new ui::Window(
-        "Inkbreaker",
-        W_WIDTH, W_HEIGHT,
-        W_FLAGS
-    );
-    window->setChild(*widget);
-    return window;
-}
 
 /**
  * The window is the parent of the Container, and forces the Container to be
@@ -549,7 +528,7 @@ class ExampleApp : public ui::Window
 {
 public:
     ExampleApp()
-        :Window("", W_WIDTH , W_HEIGHT, W_FLAGS)
+        :Window("", 800 , 600, SDL_WINDOW_RESIZABLE)
     {
         examplesDescriptions = {
             "1-Red Container constrained by Window",
