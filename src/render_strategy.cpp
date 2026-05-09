@@ -1,187 +1,74 @@
 #include "render_strategy.h"
 
+#include <algorithm>
+
 namespace ui {
 
-void Blend2DRenderStrategy::drawWindow(BLContext& context, const Size& size, BLRgba32 color)
+Size NullRenderStrategy::measureText(const std::string& value, int32_t fontSize, const std::string& fontFilepath)
 {
+    (void)fontFilepath;
+
+    int32_t maxLineWidth = 0;
+    int32_t lineCount = 1;
+    int32_t currentLineWidth = 0;
+
+    for (char character : value) {
+        if (character == '\n') {
+            maxLineWidth = std::max(maxLineWidth, currentLineWidth);
+            currentLineWidth = 0;
+            ++lineCount;
+            continue;
+        }
+        currentLineWidth += std::max(1, fontSize / 2);
+    }
+
+    maxLineWidth = std::max(maxLineWidth, currentLineWidth);
+    return {
+        .width = maxLineWidth,
+        .height = std::max(1, lineCount) * std::max(1, fontSize)
+    };
+}
+
+void NullRenderStrategy::drawWindow(const Size& size, Color color) { (void)size; (void)color; }
+void NullRenderStrategy::drawContainer(Position offset, const Size& size, Color color) { (void)offset; (void)size; (void)color; }
+void NullRenderStrategy::drawFlexContainer(Position offset, const Size& size, Color color) { (void)offset; (void)size; (void)color; }
+void NullRenderStrategy::drawCenter(Position offset, const Size& size, Color color) { (void)offset; (void)size; (void)color; }
+void NullRenderStrategy::drawAlign(Position offset, const Size& size, Color color) { (void)offset; (void)size; (void)color; }
+void NullRenderStrategy::drawPadding(Position offset, const Size& size, Color color) { (void)offset; (void)size; (void)color; }
+void NullRenderStrategy::drawGrid(Position offset, const Size& size, Color color) { (void)offset; (void)size; (void)color; }
+void NullRenderStrategy::drawButton(Position offset, const Size& size, Color backgroundColor, Color borderColor)
+{
+    (void)offset;
     (void)size;
-    context.fillAll(color);
+    (void)backgroundColor;
+    (void)borderColor;
 }
 
-void Blend2DRenderStrategy::drawContainer(BLContext& context, Position offset, const Size& size, BLRgba32 color)
-{
-    drawRectBackground(context, offset, size, color);
-}
-
-void Blend2DRenderStrategy::drawFlexContainer(BLContext& context, Position offset, const Size& size, BLRgba32 color)
-{
-    drawRectBackground(context, offset, size, color);
-}
-
-void Blend2DRenderStrategy::drawCenter(BLContext& context, Position offset, const Size& size, BLRgba32 color)
-{
-    drawRectBackground(context, offset, size, color);
-}
-
-void Blend2DRenderStrategy::drawAlign(BLContext& context, Position offset, const Size& size, BLRgba32 color)
-{
-    drawRectBackground(context, offset, size, color);
-}
-
-void Blend2DRenderStrategy::drawPadding(BLContext& context, Position offset, const Size& size, BLRgba32 color)
-{
-    drawRectBackground(context, offset, size, color);
-}
-
-void Blend2DRenderStrategy::drawGrid(BLContext& context, Position offset, const Size& size, BLRgba32 color)
-{
-    drawRectBackground(context, offset, size, color);
-}
-
-void Blend2DRenderStrategy::drawButton(
-    BLContext& context,
-    Position offset,
-    const Size& size,
-    BLRgba32 backgroundColor,
-    BLRgba32 borderColor
-)
-{
-    if (size.width <= 0 || size.height <= 0) {
-        return;
-    }
-
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, size.width, size.height});
-    context.fillRoundRect(
-        BLRoundRect{0.0, 0.0, static_cast<double>(size.width), static_cast<double>(size.height), 4.0},
-        backgroundColor
-    );
-    if (size.width > 1 && size.height > 1) {
-        context.strokeRoundRect(
-            BLRoundRect{0.5, 0.5, static_cast<double>(size.width) - 1.0, static_cast<double>(size.height) - 1.0, 4.0},
-            borderColor
-        );
-    }
-    context.restore();
-}
-
-void Blend2DRenderStrategy::drawText(
-    BLContext& context,
+void NullRenderStrategy::drawText(
     Position offset,
     const Size& size,
     const std::string& value,
-    BLRgba32 textColor,
-    BLRgba32 backgroundColor,
+    Color textColor,
+    Color backgroundColor,
     int32_t fontSize,
     const std::string& fontFilepath,
     int32_t horizontalAlignment
 )
 {
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, size.width, size.height});
-    context.fillRect(BLRectI{0, 0, size.width, size.height}, backgroundColor);
-
-    BLFontFace fontFace;
-    if (fontFace.createFromFile(fontFilepath.c_str()) != BL_SUCCESS) {
-        context.restore();
-        return;
-    }
-
-    BLFont font;
-    font.createFromFace(fontFace, static_cast<float>(fontSize));
-
-    const BLFontMetrics fontMetrics = font.metrics();
-    const double lineHeight = fontMetrics.ascent + fontMetrics.descent + fontMetrics.lineGap;
-    double y = fontMetrics.ascent;
-    BLGlyphBuffer glyphBuffer;
-    BLTextMetrics textMetrics;
-
-    size_t lineStart = 0;
-    while (lineStart <= value.size()) {
-        const size_t lineEnd = value.find('\n', lineStart);
-        const size_t lineSize = lineEnd == std::string::npos
-            ? value.size() - lineStart
-            : lineEnd - lineStart;
-
-        if (lineSize > 0) {
-            glyphBuffer.setUtf8Text(value.data() + lineStart, lineSize);
-            font.shape(glyphBuffer);
-            font.getTextMetrics(glyphBuffer, textMetrics);
-
-            double x = 0.0;
-            if (horizontalAlignment == 1) {
-                x = (static_cast<double>(size.width) - textMetrics.advance.x) / 2.0;
-            } else if (horizontalAlignment == 2) {
-                x = static_cast<double>(size.width) - textMetrics.advance.x;
-            }
-
-            context.fillUtf8Text(
-                BLPoint{x, y},
-                font,
-                value.data() + lineStart,
-                lineSize,
-                textColor
-            );
-        }
-
-        if (lineEnd == std::string::npos) {
-            break;
-        }
-        lineStart = lineEnd + 1;
-        y += lineHeight;
-    }
-
-    context.restore();
-}
-
-void Blend2DRenderStrategy::drawConstrainedBox(BLContext& context, Position offset, const Size& size)
-{
-    (void)context;
     (void)offset;
     (void)size;
+    (void)value;
+    (void)textColor;
+    (void)backgroundColor;
+    (void)fontSize;
+    (void)fontFilepath;
+    (void)horizontalAlignment;
 }
 
-void Blend2DRenderStrategy::drawUnconstrainedBox(BLContext& context, Position offset, const Size& size)
-{
-    (void)context;
-    (void)offset;
-    (void)size;
-}
-
-void Blend2DRenderStrategy::drawLimitedBox(BLContext& context, Position offset, const Size& size)
-{
-    (void)context;
-    (void)offset;
-    (void)size;
-}
-
-void Blend2DRenderStrategy::drawOverlay(BLContext& context, Position offset, const Size& size)
-{
-    (void)context;
-    (void)offset;
-    (void)size;
-}
-
-void Blend2DRenderStrategy::drawCalculator(BLContext& context, Position offset, const Size& size)
-{
-    (void)context;
-    (void)offset;
-    (void)size;
-}
-
-void Blend2DRenderStrategy::drawRectBackground(BLContext& context, Position offset, const Size& size, BLRgba32 color)
-{
-    if (size.width <= 0 || size.height <= 0) {
-        return;
-    }
-
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, size.width, size.height});
-    context.fillRect(BLRectI{0, 0, size.width, size.height}, color);
-    context.restore();
-}
+void NullRenderStrategy::drawConstrainedBox(Position offset, const Size& size) { (void)offset; (void)size; }
+void NullRenderStrategy::drawUnconstrainedBox(Position offset, const Size& size) { (void)offset; (void)size; }
+void NullRenderStrategy::drawLimitedBox(Position offset, const Size& size) { (void)offset; (void)size; }
+void NullRenderStrategy::drawOverlay(Position offset, const Size& size) { (void)offset; (void)size; }
+void NullRenderStrategy::drawCalculator(Position offset, const Size& size) { (void)offset; (void)size; }
 
 } // namespace ui

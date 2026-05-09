@@ -62,12 +62,12 @@ Size Button::layout(const BoxConstraints& boxConstraints)
     return normalizedSize;
 }
 
-void Button::render(BLContext& context, Position offset)
+void Button::render(Position offset)
 {
-    getRenderStrategy().drawButton(context, offset, _size, currentColor(), _borderColor);
+    getRenderStrategy().drawButton(offset, _size, currentColor(), _borderColor);
 
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(offset.add(_childPosition));
     }
 }
 
@@ -114,7 +114,7 @@ bool Button::contains(Position position) const
            position.y < _size.height;
 }
 
-BLRgba32 Button::currentColor() const
+Color Button::currentColor() const
 {
     if (_pressed) {
         return _pressedColor;

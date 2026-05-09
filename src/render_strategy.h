@@ -1,8 +1,7 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
-
-#include <blend2d.h>
 
 #include "layout.h"
 #include "render_types.h"
@@ -13,73 +12,60 @@ class RenderStrategy {
 public:
     virtual ~RenderStrategy() = default;
 
-    virtual void drawWindow(BLContext& context, const Size& size, BLRgba32 color) = 0;
-    virtual void drawContainer(BLContext& context, Position offset, const Size& size, BLRgba32 color) = 0;
-    virtual void drawFlexContainer(BLContext& context, Position offset, const Size& size, BLRgba32 color) = 0;
-    virtual void drawCenter(BLContext& context, Position offset, const Size& size, BLRgba32 color) = 0;
-    virtual void drawAlign(BLContext& context, Position offset, const Size& size, BLRgba32 color) = 0;
-    virtual void drawPadding(BLContext& context, Position offset, const Size& size, BLRgba32 color) = 0;
-    virtual void drawGrid(BLContext& context, Position offset, const Size& size, BLRgba32 color) = 0;
-    virtual void drawButton(
-        BLContext& context,
-        Position offset,
-        const Size& size,
-        BLRgba32 backgroundColor,
-        BLRgba32 borderColor
-    ) = 0;
+    virtual Size measureText(const std::string& value, int32_t fontSize, const std::string& fontFilepath) = 0;
+
+    virtual void drawWindow(const Size& size, Color color) = 0;
+    virtual void drawContainer(Position offset, const Size& size, Color color) = 0;
+    virtual void drawFlexContainer(Position offset, const Size& size, Color color) = 0;
+    virtual void drawCenter(Position offset, const Size& size, Color color) = 0;
+    virtual void drawAlign(Position offset, const Size& size, Color color) = 0;
+    virtual void drawPadding(Position offset, const Size& size, Color color) = 0;
+    virtual void drawGrid(Position offset, const Size& size, Color color) = 0;
+    virtual void drawButton(Position offset, const Size& size, Color backgroundColor, Color borderColor) = 0;
     virtual void drawText(
-        BLContext& context,
         Position offset,
         const Size& size,
         const std::string& value,
-        BLRgba32 textColor,
-        BLRgba32 backgroundColor,
+        Color textColor,
+        Color backgroundColor,
         int32_t fontSize,
         const std::string& fontFilepath,
         int32_t horizontalAlignment
     ) = 0;
-    virtual void drawConstrainedBox(BLContext& context, Position offset, const Size& size) = 0;
-    virtual void drawUnconstrainedBox(BLContext& context, Position offset, const Size& size) = 0;
-    virtual void drawLimitedBox(BLContext& context, Position offset, const Size& size) = 0;
-    virtual void drawOverlay(BLContext& context, Position offset, const Size& size) = 0;
-    virtual void drawCalculator(BLContext& context, Position offset, const Size& size) = 0;
+    virtual void drawConstrainedBox(Position offset, const Size& size) = 0;
+    virtual void drawUnconstrainedBox(Position offset, const Size& size) = 0;
+    virtual void drawLimitedBox(Position offset, const Size& size) = 0;
+    virtual void drawOverlay(Position offset, const Size& size) = 0;
+    virtual void drawCalculator(Position offset, const Size& size) = 0;
 };
 
-class Blend2DRenderStrategy final : public RenderStrategy {
+class NullRenderStrategy final : public RenderStrategy {
 public:
-    void drawWindow(BLContext& context, const Size& size, BLRgba32 color) override;
-    void drawContainer(BLContext& context, Position offset, const Size& size, BLRgba32 color) override;
-    void drawFlexContainer(BLContext& context, Position offset, const Size& size, BLRgba32 color) override;
-    void drawCenter(BLContext& context, Position offset, const Size& size, BLRgba32 color) override;
-    void drawAlign(BLContext& context, Position offset, const Size& size, BLRgba32 color) override;
-    void drawPadding(BLContext& context, Position offset, const Size& size, BLRgba32 color) override;
-    void drawGrid(BLContext& context, Position offset, const Size& size, BLRgba32 color) override;
-    void drawButton(
-        BLContext& context,
-        Position offset,
-        const Size& size,
-        BLRgba32 backgroundColor,
-        BLRgba32 borderColor
-    ) override;
+    Size measureText(const std::string& value, int32_t fontSize, const std::string& fontFilepath) override;
+
+    void drawWindow(const Size& size, Color color) override;
+    void drawContainer(Position offset, const Size& size, Color color) override;
+    void drawFlexContainer(Position offset, const Size& size, Color color) override;
+    void drawCenter(Position offset, const Size& size, Color color) override;
+    void drawAlign(Position offset, const Size& size, Color color) override;
+    void drawPadding(Position offset, const Size& size, Color color) override;
+    void drawGrid(Position offset, const Size& size, Color color) override;
+    void drawButton(Position offset, const Size& size, Color backgroundColor, Color borderColor) override;
     void drawText(
-        BLContext& context,
         Position offset,
         const Size& size,
         const std::string& value,
-        BLRgba32 textColor,
-        BLRgba32 backgroundColor,
+        Color textColor,
+        Color backgroundColor,
         int32_t fontSize,
         const std::string& fontFilepath,
         int32_t horizontalAlignment
     ) override;
-    void drawConstrainedBox(BLContext& context, Position offset, const Size& size) override;
-    void drawUnconstrainedBox(BLContext& context, Position offset, const Size& size) override;
-    void drawLimitedBox(BLContext& context, Position offset, const Size& size) override;
-    void drawOverlay(BLContext& context, Position offset, const Size& size) override;
-    void drawCalculator(BLContext& context, Position offset, const Size& size) override;
-
-private:
-    static void drawRectBackground(BLContext& context, Position offset, const Size& size, BLRgba32 color);
+    void drawConstrainedBox(Position offset, const Size& size) override;
+    void drawUnconstrainedBox(Position offset, const Size& size) override;
+    void drawLimitedBox(Position offset, const Size& size) override;
+    void drawOverlay(Position offset, const Size& size) override;
+    void drawCalculator(Position offset, const Size& size) override;
 };
 
 } // namespace ui

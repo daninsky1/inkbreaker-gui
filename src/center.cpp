@@ -32,12 +32,12 @@ Size Center::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Center::render(BLContext& context, Position offset)
+void Center::render(Position offset)
 {
-    getRenderStrategy().drawCenter(context, offset, _size, _color);
+    getRenderStrategy().drawCenter(offset, _size, _color);
 
     if (_child != nullptr) {
-        _child->render(context, _childPosition.add(offset));
+        _child->render(_childPosition.add(offset));
     }
 }
 

@@ -35,8 +35,7 @@ int runApplication(ui::Window& rootWindow)
             rootWindow.eventHandler(event); // Dispatch event to the widget
         }
         rootWindow.update();
-        BLContext context;
-        rootWindow.render(context, {0, 0}); // Render the root window
+        rootWindow.render({0, 0}); // Render the root window
 
         // SDL_Renderer* renderer = rootWindow.getRenderer();
 

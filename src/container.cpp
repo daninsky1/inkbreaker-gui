@@ -44,12 +44,12 @@ Size Container::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Container::render(BLContext& context, Position offset)
+void Container::render(Position offset)
 {
-    getRenderStrategy().drawContainer(context, offset, _size, _backgroundColor);
+    getRenderStrategy().drawContainer(offset, _size, _backgroundColor);
 
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(offset.add(_childPosition));
     }
 }
 } // namespace ui

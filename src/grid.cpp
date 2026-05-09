@@ -72,13 +72,13 @@ Size Grid::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void Grid::render(BLContext& context, Position offset)
+void Grid::render(Position offset)
 {
-    getRenderStrategy().drawGrid(context, offset, _size, _color);
+    getRenderStrategy().drawGrid(offset, _size, _color);
 
     for (size_t index = 0; index < _children.size(); ++index) {
         if (_children[index] != nullptr && index < _childPositions.size()) {
-            _children[index]->render(context, offset.add(_childPositions[index]));
+            _children[index]->render(offset.add(_childPositions[index]));
         }
     }
 }

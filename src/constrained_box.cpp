@@ -19,12 +19,12 @@ Size ConstrainedBox::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void ConstrainedBox::render(BLContext& context, Position offset)
+void ConstrainedBox::render(Position offset)
 {
-    getRenderStrategy().drawConstrainedBox(context, offset, _size);
+    getRenderStrategy().drawConstrainedBox(offset, _size);
 
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(offset.add(_childPosition));
     }
 }
 

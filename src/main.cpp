@@ -74,8 +74,7 @@ SDL_AppResult SDL_AppIterate(void* appstate)
 
     const uint64_t startTime = SDL_GetTicks();
     rootWindow->update();
-    BLContext context;
-    rootWindow->render(context, {0, 0}); // Render the root window
+    rootWindow->render({0, 0}); // Render the root window
 
     const uint64_t elapsedTime = SDL_GetTicks() - startTime; // Calculate elapsed time
 

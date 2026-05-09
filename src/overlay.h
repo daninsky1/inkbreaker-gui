@@ -14,7 +14,7 @@ public:
     explicit Overlay(const std::vector<Widget*>& children);
 
     Size layout(const BoxConstraints& boxConstraints) override;
-    void render(BLContext& context, Position offset) override;
+    void render(Position offset) override;
     Event& eventHandler(Event& event) override;
 };
 

@@ -73,12 +73,12 @@ Size Align::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Align::render(BLContext& context, Position offset)
+void Align::render(Position offset)
 {
-    getRenderStrategy().drawAlign(context, offset, _size, _color);
+    getRenderStrategy().drawAlign(offset, _size, _color);
 
     if (_child != nullptr) {
-        _child->render(context, _childPosition.add(offset));
+        _child->render(_childPosition.add(offset));
     }
 }
 

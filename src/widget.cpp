@@ -5,7 +5,7 @@
 namespace ui
 {
 namespace {
-Blend2DRenderStrategy defaultRenderStrategy;
+NullRenderStrategy defaultRenderStrategy;
 }
 
 Size Widget::normalize(const BoxConstraints& constraint)

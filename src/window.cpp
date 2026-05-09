@@ -4,7 +4,7 @@
 
 #include "window.h"
 
-#include "render_strategy.h"
+#include "render_backend.h"
 
 namespace ui {
 Window::Window(std::string title, int32_t w, int32_t h, SDL_WindowFlags flags)
@@ -16,8 +16,11 @@ Window::Window(std::string title, int32_t w, int32_t h, SDL_WindowFlags flags)
         SDL_Log("Failed to create window and renderer: %s", SDL_GetError());
     }
     SDL_SetWindowBordered(_window, true);
+    _renderBackend = createDefaultRenderBackend(_size);
     setRenderSurface();
 }
+
+Window::~Window() = default;
 
 void Window::setRenderSurface()
 {
@@ -27,8 +30,9 @@ void Window::setRenderSurface()
         return;
     }
 
-    _image = BLImage(w, h, BL_FORMAT_PRGB32);
-    _image.getData(&_imageData);
+    if (_renderBackend != nullptr) {
+        _renderBackend->resize({w, h});
+    }
 
     if (_texture != nullptr) {
         SDL_DestroyTexture(_texture);
@@ -53,24 +57,19 @@ void Window::setMinimumSize(int32_t width, int32_t height)
     }
 }
 
-void Window::render(BLContext& context, Position offset)
+void Window::render(Position offset)
 {
-    (void)context;
     (void)offset;
 
-    if (_child == nullptr) {
-        SDL_Log("No child widget to render.");
-        return;
+    _renderBackend->beginFrame(_color);
+
+    if (_child != nullptr) {
+        _renderBackend->renderWidget(*_child);
     }
 
-    BLContext childContext(_image);
-    getRenderStrategy().drawWindow(childContext, _size, _color);
-    _child->render(childContext, {0, 0});
-    childContext.end();
+    _renderBackend->endFrame();
 
-    _image.getData(&_imageData);
-
-    if (!SDL_UpdateTexture(_texture, nullptr, _imageData.pixelData, static_cast<int>(_imageData.stride))) {
+    if (!SDL_UpdateTexture(_texture, nullptr, _renderBackend->pixels(), _renderBackend->stride())) {
         SDL_Log("Failed to update texture: %s", SDL_GetError());
         return;
     }
@@ -80,8 +79,9 @@ void Window::render(BLContext& context, Position offset)
     SDL_RenderPresent(_sdlRenderer);
 }
 
-void Window::update() const {
+void Window::update() {
     if (_child != nullptr) {
+        _child->setRenderStrategy(_renderBackend->strategy());
         _child->layout(_boxConstraints);
     }
 }

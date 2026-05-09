@@ -6,16 +6,16 @@
 
 namespace ui
 {
-void FlexContainer::render(BLContext& context, Position offset)
+void FlexContainer::render(Position offset)
 {
-    getRenderStrategy().drawFlexContainer(context, offset, _size, _backgroundColor);
+    getRenderStrategy().drawFlexContainer(offset, _size, _backgroundColor);
 
     switch (_flexDirection) {
     case css::FlexDirection::Row:
         SDL_Log("Rendering FlexContainer in Row direction");
         for (auto &child : _children) {        
             if (child) {
-                child->render(context, {0, 0});
+                child->render({0, 0});
             }
             // absX += child->getWidth();
         }
@@ -30,7 +30,7 @@ void FlexContainer::render(BLContext& context, Position offset)
         for (size_t i = (_children.size() - 1); i > 0; i--) {        
             auto &child = _children[i];
             if (child) {
-                child->render(context, {0, 0});
+                child->render({0, 0});
             }
             // absX += child->getWidth();
         }

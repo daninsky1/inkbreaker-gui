@@ -60,12 +60,12 @@ Size LimitedBox::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void LimitedBox::render(BLContext& context, Position offset)
+void LimitedBox::render(Position offset)
 {
-    getRenderStrategy().drawLimitedBox(context, offset, _size);
+    getRenderStrategy().drawLimitedBox(offset, _size);
 
     if (_child != nullptr) {
-        _child->render(context, _childPosition.add(offset));
+        _child->render(_childPosition.add(offset));
     }
 }
 

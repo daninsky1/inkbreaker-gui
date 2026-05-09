@@ -26,13 +26,13 @@ Size Overlay::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void Overlay::render(BLContext& context, Position offset)
+void Overlay::render(Position offset)
 {
-    getRenderStrategy().drawOverlay(context, offset, _size);
+    getRenderStrategy().drawOverlay(offset, _size);
 
     for (auto* child : _children) {
         if (child != nullptr) {
-            child->render(context, offset);
+            child->render(offset);
         }
     }
 }

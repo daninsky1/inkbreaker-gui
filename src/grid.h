@@ -22,11 +22,11 @@ public:
     void setRowGap(int32_t gap) { _rowGap = gap; }
     void setColumnGap(int32_t gap) { _columnGap = gap; }
     void setPadding(BoxSpace padding) { _padding = padding; }
-    void setColor(BLRgba32 color) { _color = color; }
+    void setColor(Color color) { _color = color; }
     void setCells(std::vector<Cell> cells) { _cells = std::move(cells); }
 
     Size layout(const BoxConstraints& boxConstraints) override;
-    void render(BLContext& context, Position offset) override;
+    void render(Position offset) override;
     Event& eventHandler(Event& event) override;
 
 private:
@@ -38,7 +38,7 @@ private:
     int32_t _rowGap = 0;
     int32_t _columnGap = 0;
     BoxSpace _padding{};
-    BLRgba32 _color = Colors::TRANSPARENT;
+    Color _color = Colors::TRANSPARENT;
     std::vector<Position> _childPositions;
     std::vector<bool> _childPointerInside;
     std::vector<bool> _childPointerActive;

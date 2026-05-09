@@ -60,12 +60,12 @@ Size UnconstrainedBox::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void UnconstrainedBox::render(BLContext& context, Position offset)
+void UnconstrainedBox::render(Position offset)
 {
-    getRenderStrategy().drawUnconstrainedBox(context, offset, _size);
+    getRenderStrategy().drawUnconstrainedBox(offset, _size);
 
     if (_child != nullptr) {
-        _child->render(context, _childPosition.add(offset));
+        _child->render(_childPosition.add(offset));
     }
 }
 

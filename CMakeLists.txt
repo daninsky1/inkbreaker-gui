@@ -56,6 +56,9 @@ set(SOURCES
         src/overlay.h
         src/render_strategy.cpp
         src/render_strategy.h
+        src/render_backend.h
+        src/blend2d_render_backend.cpp
+        src/blend2d_render_backend.h
         src/render_types.h
         src/graphics/geometry.h
 )

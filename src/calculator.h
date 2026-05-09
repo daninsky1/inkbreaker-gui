@@ -10,7 +10,7 @@ public:
     CalculatorWidget();
 
     Size layout(const BoxConstraints& boxConstraints) override;
-    void render(BLContext& context, Position offset) override;
+    void render(Position offset) override;
     ui::Event& eventHandler(ui::Event& event) override;
 
 private:

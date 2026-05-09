@@ -52,12 +52,12 @@ Size Padding::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Padding::render(BLContext& context, Position offset)
+void Padding::render(Position offset)
 {
-    getRenderStrategy().drawPadding(context, offset, _size, _color);
+    getRenderStrategy().drawPadding(offset, _size, _color);
 
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(offset.add(_childPosition));
     }
 }
 } // ui
