@@ -2,10 +2,14 @@
 
 #include "SDL3/SDL_log.h"
 
+#include "render_strategy.h"
+
 namespace ui
 {
 void FlexContainer::render(BLContext& context, Position offset)
 {
+    getRenderStrategy().drawFlexContainer(context, offset, _size, _backgroundColor);
+
     switch (_flexDirection) {
     case css::FlexDirection::Row:
         SDL_Log("Rendering FlexContainer in Row direction");

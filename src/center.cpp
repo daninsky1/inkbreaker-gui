@@ -4,6 +4,8 @@
 
 #include "center.h"
 
+#include "render_strategy.h"
+
 namespace ui {
 
 Center::Center()
@@ -32,15 +34,7 @@ Size Center::layout(const BoxConstraints& constraint)
 
 void Center::render(BLContext& context, Position offset)
 {
-    context.save();
-
-    context.translate(offset.x, offset.x);
-
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
-
-    context.restore();
+    getRenderStrategy().drawCenter(context, offset, _size, _color);
 
     if (_child != nullptr) {
         _child->render(context, _childPosition.add(offset));

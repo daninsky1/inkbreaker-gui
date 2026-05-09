@@ -1,5 +1,6 @@
 #include "container.h"
 
+#include "render_strategy.h"
 
 namespace ui
 {
@@ -45,16 +46,7 @@ Size Container::layout(const BoxConstraints& constraint)
 
 void Container::render(BLContext& context, Position offset)
 {
-    context.save();
-
-    context.translate(offset.x, offset.y);
-
-    // Define o retângulo de clipping do container
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _backgroundColor);
-
-    // Restaura o estado anterior do renderer
-    context.restore();
+    getRenderStrategy().drawContainer(context, offset, _size, _backgroundColor);
 
     if (_child != nullptr) {
         _child->render(context, offset.add(_childPosition));

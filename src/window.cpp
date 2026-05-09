@@ -4,6 +4,8 @@
 
 #include "window.h"
 
+#include "render_strategy.h"
+
 namespace ui {
 Window::Window(std::string title, int32_t w, int32_t h, SDL_WindowFlags flags)
     : _title(std::move(title)), _flags(flags)
@@ -62,7 +64,7 @@ void Window::render(BLContext& context, Position offset)
     }
 
     BLContext childContext(_image);
-    childContext.fillAll(_color);
+    getRenderStrategy().drawWindow(childContext, _size, _color);
     _child->render(childContext, {0, 0});
     childContext.end();
 

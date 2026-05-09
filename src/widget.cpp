@@ -1,7 +1,12 @@
 #include "widget.h"
 
+#include "render_strategy.h"
+
 namespace ui
 {
+namespace {
+Blend2DRenderStrategy defaultRenderStrategy;
+}
 
 Size Widget::normalize(const BoxConstraints& constraint)
 {
@@ -10,6 +15,17 @@ Size Widget::normalize(const BoxConstraints& constraint)
 }
 
 std::string Widget::toString() const { return _runtimeType; }
+
+RenderStrategy& Widget::getRenderStrategy() const
+{
+    if (_renderStrategy != nullptr) {
+        return *_renderStrategy;
+    }
+    if (_parent != nullptr) {
+        return _parent->getRenderStrategy();
+    }
+    return defaultRenderStrategy;
+}
 
 std::string Widget::getRuntimeType()
 {

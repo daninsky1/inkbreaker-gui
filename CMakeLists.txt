@@ -54,6 +54,8 @@ set(SOURCES
         src/calculator.h
         src/overlay.cpp
         src/overlay.h
+        src/render_strategy.cpp
+        src/render_strategy.h
         src/render_types.h
         src/graphics/geometry.h
 )

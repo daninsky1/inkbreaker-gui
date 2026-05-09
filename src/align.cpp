@@ -4,6 +4,8 @@
 
 #include "align.h"
 
+#include "render_strategy.h"
+
 namespace ui
 {
 Align::Align()
@@ -73,16 +75,7 @@ Size Align::layout(const BoxConstraints& constraint)
 
 void Align::render(BLContext& context, Position offset)
 {
-
-    context.save();
-
-    context.translate(offset.x, offset.y);
-
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
-
-    context.restore();
+    getRenderStrategy().drawAlign(context, offset, _size, _color);
 
     if (_child != nullptr) {
         _child->render(context, _childPosition.add(offset));

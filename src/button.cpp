@@ -8,6 +8,8 @@
 
 #include <SDL3/SDL_mouse.h>
 
+#include "render_strategy.h"
+
 namespace ui {
 
 Button::Button(Widget& child)
@@ -62,18 +64,7 @@ Size Button::layout(const BoxConstraints& boxConstraints)
 
 void Button::render(BLContext& context, Position offset)
 {
-    if (_size.width <= 0 || _size.height <= 0) {
-        return;
-    }
-
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRoundRect(BLRoundRect{0.0, 0.0, static_cast<double>(_size.width), static_cast<double>(_size.height), 4.0}, currentColor());
-    if (_size.width > 1 && _size.height > 1) {
-        context.strokeRoundRect(BLRoundRect{0.5, 0.5, static_cast<double>(_size.width) - 1.0, static_cast<double>(_size.height) - 1.0, 4.0}, _borderColor);
-    }
-    context.restore();
+    getRenderStrategy().drawButton(context, offset, _size, currentColor(), _borderColor);
 
     if (_child != nullptr) {
         _child->render(context, offset.add(_childPosition));

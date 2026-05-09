@@ -4,6 +4,8 @@
 
 #include "padding.h"
 
+#include "render_strategy.h"
+
 namespace ui {
 
 Padding::Padding()
@@ -52,15 +54,7 @@ Size Padding::layout(const BoxConstraints& constraint)
 
 void Padding::render(BLContext& context, Position offset)
 {
-    if (_size.width <= 0 || _size.height <= 0) {
-        return;
-    }
-
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
-    context.restore();
+    getRenderStrategy().drawPadding(context, offset, _size, _color);
 
     if (_child != nullptr) {
         _child->render(context, offset.add(_childPosition));

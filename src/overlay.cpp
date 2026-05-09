@@ -1,5 +1,7 @@
 #include "overlay.h"
 
+#include "render_strategy.h"
+
 namespace ui
 {
 
@@ -26,6 +28,8 @@ Size Overlay::layout(const BoxConstraints& boxConstraints)
 
 void Overlay::render(BLContext& context, Position offset)
 {
+    getRenderStrategy().drawOverlay(context, offset, _size);
+
     for (auto* child : _children) {
         if (child != nullptr) {
             child->render(context, offset);

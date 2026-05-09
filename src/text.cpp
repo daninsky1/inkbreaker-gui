@@ -6,6 +6,8 @@
 
 #include <cmath>
 
+#include "render_strategy.h"
+
 namespace ui {
 
 namespace {
@@ -73,62 +75,17 @@ Size Text::layout(const BoxConstraints& boxConstraints)
 
 void Text::render(BLContext& context, Position offset)
 {
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _backgoundColor);
-
-    BLFontFace fontFace;
-    if (fontFace.createFromFile(_fontFilepath.c_str()) != BL_SUCCESS) {
-        context.restore();
-        return;
-    }
-
-    BLFont font;
-    font.createFromFace(fontFace, static_cast<float>(_fontSize));
-
-    const BLFontMetrics fontMetrics = font.metrics();
-    const double lineHeight = fontMetrics.ascent + fontMetrics.descent + fontMetrics.lineGap;
-    double y = fontMetrics.ascent;
-    BLGlyphBuffer glyphBuffer;
-    BLTextMetrics textMetrics;
-
-    size_t lineStart = 0;
-    while (lineStart <= _value.size()) {
-        const size_t lineEnd = _value.find('\n', lineStart);
-        const size_t lineSize = lineEnd == std::string::npos
-            ? _value.size() - lineStart
-            : lineEnd - lineStart;
-
-        if (lineSize > 0) {
-            glyphBuffer.setUtf8Text(_value.data() + lineStart, lineSize);
-            font.shape(glyphBuffer);
-            font.getTextMetrics(glyphBuffer, textMetrics);
-
-            double x = 0.0;
-            if (_horizontalAlignment == TextAlignment::Center) {
-                x = (static_cast<double>(_size.width) - textMetrics.advance.x) / 2.0;
-            } else if (_horizontalAlignment == TextAlignment::Right) {
-                x = static_cast<double>(_size.width) - textMetrics.advance.x;
-            }
-
-            context.fillUtf8Text(
-                BLPoint{x, y},
-                font,
-                _value.data() + lineStart,
-                lineSize,
-                _color
-            );
-        }
-
-        if (lineEnd == std::string::npos) {
-            break;
-        }
-        lineStart = lineEnd + 1;
-        y += lineHeight;
-    }
-
-    context.restore();
+    getRenderStrategy().drawText(
+        context,
+        offset,
+        _size,
+        _value,
+        _color,
+        _backgoundColor,
+        _fontSize,
+        _fontFilepath,
+        static_cast<int32_t>(_horizontalAlignment)
+    );
 }
 
 } // ui

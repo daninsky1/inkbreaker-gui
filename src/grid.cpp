@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "render_strategy.h"
+
 namespace ui {
 
 Grid::Grid(int32_t columns, int32_t rows)
@@ -72,15 +74,7 @@ Size Grid::layout(const BoxConstraints& boxConstraints)
 
 void Grid::render(BLContext& context, Position offset)
 {
-    if (_size.width <= 0 || _size.height <= 0) {
-        return;
-    }
-
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
-    context.restore();
+    getRenderStrategy().drawGrid(context, offset, _size, _color);
 
     for (size_t index = 0; index < _children.size(); ++index) {
         if (_children[index] != nullptr && index < _childPositions.size()) {
