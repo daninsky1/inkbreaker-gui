@@ -4,7 +4,7 @@
 
 #include "padding.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui {
 
@@ -54,7 +54,7 @@ Size Padding::layout(const BoxConstraints& constraint)
 
 void Padding::render(Position offset)
 {
-    getRenderStrategy().drawPadding(offset, _size, _color);
+    getRenderer().drawPadding(offset, _size, _color);
 
     if (_child != nullptr) {
         _child->render(offset.add(_childPosition));

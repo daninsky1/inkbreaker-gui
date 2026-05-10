@@ -8,7 +8,7 @@
 
 namespace ui {
 
-class RenderStrategy;
+class Renderer;
 class Widget;
 
 class RenderBackend {
@@ -22,7 +22,7 @@ public:
 
     virtual const void* pixels() const = 0;
     virtual int32_t stride() const = 0;
-    virtual RenderStrategy& strategy() = 0;
+    virtual Renderer& renderer() = 0;
 };
 
 std::unique_ptr<RenderBackend> createDefaultRenderBackend(Size size);

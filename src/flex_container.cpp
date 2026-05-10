@@ -2,13 +2,13 @@
 
 #include "SDL3/SDL_log.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui
 {
 void FlexContainer::render(Position offset)
 {
-    getRenderStrategy().drawFlexContainer(offset, _size, _backgroundColor);
+    getRenderer().drawFlexContainer(offset, _size, _backgroundColor);
 
     switch (_flexDirection) {
     case css::FlexDirection::Row:

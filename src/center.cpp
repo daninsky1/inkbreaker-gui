@@ -4,7 +4,7 @@
 
 #include "center.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui {
 
@@ -34,7 +34,7 @@ Size Center::layout(const BoxConstraints& constraint)
 
 void Center::render(Position offset)
 {
-    getRenderStrategy().drawCenter(offset, _size, _color);
+    getRenderer().drawCenter(offset, _size, _color);
 
     if (_child != nullptr) {
         _child->render(_childPosition.add(offset));

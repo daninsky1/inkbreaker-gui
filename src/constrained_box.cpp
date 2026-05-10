@@ -4,7 +4,7 @@
 
 #include "constrained_box.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui {
 
@@ -21,7 +21,7 @@ Size ConstrainedBox::layout(const BoxConstraints& boxConstraints)
 
 void ConstrainedBox::render(Position offset)
 {
-    getRenderStrategy().drawConstrainedBox(offset, _size);
+    getRenderer().drawConstrainedBox(offset, _size);
 
     if (_child != nullptr) {
         _child->render(offset.add(_childPosition));

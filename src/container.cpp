@@ -1,6 +1,6 @@
 #include "container.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui
 {
@@ -46,7 +46,7 @@ Size Container::layout(const BoxConstraints& constraint)
 
 void Container::render(Position offset)
 {
-    getRenderStrategy().drawContainer(offset, _size, _backgroundColor);
+    getRenderer().drawContainer(offset, _size, _backgroundColor);
 
     if (_child != nullptr) {
         _child->render(offset.add(_childPosition));

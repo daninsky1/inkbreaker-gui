@@ -4,7 +4,7 @@
 
 #include "unconstrained_box.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui {
 
@@ -62,7 +62,7 @@ Size UnconstrainedBox::layout(const BoxConstraints& boxConstraints)
 
 void UnconstrainedBox::render(Position offset)
 {
-    getRenderStrategy().drawUnconstrainedBox(offset, _size);
+    getRenderer().drawUnconstrainedBox(offset, _size);
 
     if (_child != nullptr) {
         _child->render(_childPosition.add(offset));

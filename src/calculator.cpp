@@ -16,7 +16,7 @@
 #include "button.h"
 #include "grid.h"
 #include "padding.h"
-#include "render_strategy.h"
+#include "renderer.h"
 #include "text.h"
 
 namespace {
@@ -75,7 +75,7 @@ Size CalculatorWidget::layout(const BoxConstraints& boxConstraints)
 
 void CalculatorWidget::render(Position offset)
 {
-    getRenderStrategy().drawCalculator(offset, _size);
+    getRenderer().drawCalculator(offset, _size);
 
     if (_child != nullptr) {
         _child->render(offset.add(_childPosition));

@@ -1,11 +1,12 @@
 #include "widget.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui
 {
 namespace {
-NullRenderStrategy defaultRenderStrategy;
+NullRenderer defaultRendererImpl;
+Renderer defaultRenderer(defaultRendererImpl);
 }
 
 Size Widget::normalize(const BoxConstraints& constraint)
@@ -16,15 +17,15 @@ Size Widget::normalize(const BoxConstraints& constraint)
 
 std::string Widget::toString() const { return _runtimeType; }
 
-RenderStrategy& Widget::getRenderStrategy() const
+Renderer& Widget::getRenderer() const
 {
-    if (_renderStrategy != nullptr) {
-        return *_renderStrategy;
+    if (_renderer != nullptr) {
+        return *_renderer;
     }
     if (_parent != nullptr) {
-        return _parent->getRenderStrategy();
+        return _parent->getRenderer();
     }
-    return defaultRenderStrategy;
+    return defaultRenderer;
 }
 
 std::string Widget::getRuntimeType()

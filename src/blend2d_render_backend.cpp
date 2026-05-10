@@ -14,7 +14,7 @@ int32_t ceilToInt(double value)
 }
 } // namespace
 
-Size Blend2DRenderStrategy::measureText(const std::string& value, int32_t fontSize, const std::string& fontFilepath)
+Size Blend2DRenderer::measureText(const std::string& value, int32_t fontSize, const std::string& fontFilepath)
 {
     BLFontFace fontFace;
     if (fontFace.createFromFile(fontFilepath.c_str()) != BL_SUCCESS) {
@@ -59,7 +59,7 @@ Size Blend2DRenderStrategy::measureText(const std::string& value, int32_t fontSi
     };
 }
 
-void Blend2DRenderStrategy::drawWindow(const Size& size, Color color)
+void Blend2DRenderer::drawWindow(const Size& size, Color color)
 {
     (void)size;
     if (_context != nullptr) {
@@ -67,37 +67,37 @@ void Blend2DRenderStrategy::drawWindow(const Size& size, Color color)
     }
 }
 
-void Blend2DRenderStrategy::drawContainer(Position offset, const Size& size, Color color)
+void Blend2DRenderer::drawContainer(Position offset, const Size& size, Color color)
 {
     drawRectBackground(offset, size, color);
 }
 
-void Blend2DRenderStrategy::drawFlexContainer(Position offset, const Size& size, Color color)
+void Blend2DRenderer::drawFlexContainer(Position offset, const Size& size, Color color)
 {
     drawRectBackground(offset, size, color);
 }
 
-void Blend2DRenderStrategy::drawCenter(Position offset, const Size& size, Color color)
+void Blend2DRenderer::drawCenter(Position offset, const Size& size, Color color)
 {
     drawRectBackground(offset, size, color);
 }
 
-void Blend2DRenderStrategy::drawAlign(Position offset, const Size& size, Color color)
+void Blend2DRenderer::drawAlign(Position offset, const Size& size, Color color)
 {
     drawRectBackground(offset, size, color);
 }
 
-void Blend2DRenderStrategy::drawPadding(Position offset, const Size& size, Color color)
+void Blend2DRenderer::drawPadding(Position offset, const Size& size, Color color)
 {
     drawRectBackground(offset, size, color);
 }
 
-void Blend2DRenderStrategy::drawGrid(Position offset, const Size& size, Color color)
+void Blend2DRenderer::drawGrid(Position offset, const Size& size, Color color)
 {
     drawRectBackground(offset, size, color);
 }
 
-void Blend2DRenderStrategy::drawButton(Position offset, const Size& size, Color backgroundColor, Color borderColor)
+void Blend2DRenderer::drawButton(Position offset, const Size& size, Color backgroundColor, Color borderColor)
 {
     if (_context == nullptr || size.width <= 0 || size.height <= 0) {
         return;
@@ -119,7 +119,7 @@ void Blend2DRenderStrategy::drawButton(Position offset, const Size& size, Color 
     _context->restore();
 }
 
-void Blend2DRenderStrategy::drawText(
+void Blend2DRenderer::drawText(
     Position offset,
     const Size& size,
     const std::string& value,
@@ -192,18 +192,18 @@ void Blend2DRenderStrategy::drawText(
     _context->restore();
 }
 
-void Blend2DRenderStrategy::drawConstrainedBox(Position offset, const Size& size) { (void)offset; (void)size; }
-void Blend2DRenderStrategy::drawUnconstrainedBox(Position offset, const Size& size) { (void)offset; (void)size; }
-void Blend2DRenderStrategy::drawLimitedBox(Position offset, const Size& size) { (void)offset; (void)size; }
-void Blend2DRenderStrategy::drawOverlay(Position offset, const Size& size) { (void)offset; (void)size; }
-void Blend2DRenderStrategy::drawCalculator(Position offset, const Size& size) { (void)offset; (void)size; }
+void Blend2DRenderer::drawConstrainedBox(Position offset, const Size& size) { (void)offset; (void)size; }
+void Blend2DRenderer::drawUnconstrainedBox(Position offset, const Size& size) { (void)offset; (void)size; }
+void Blend2DRenderer::drawLimitedBox(Position offset, const Size& size) { (void)offset; (void)size; }
+void Blend2DRenderer::drawOverlay(Position offset, const Size& size) { (void)offset; (void)size; }
+void Blend2DRenderer::drawCalculator(Position offset, const Size& size) { (void)offset; (void)size; }
 
-BLRgba32 Blend2DRenderStrategy::toBlendColor(Color color)
+BLRgba32 Blend2DRenderer::toBlendColor(Color color)
 {
     return BLRgba32{color.r, color.g, color.b, color.a};
 }
 
-void Blend2DRenderStrategy::drawRectBackground(Position offset, const Size& size, Color color)
+void Blend2DRenderer::drawRectBackground(Position offset, const Size& size, Color color)
 {
     if (_context == nullptr || size.width <= 0 || size.height <= 0) {
         return;
@@ -217,6 +217,7 @@ void Blend2DRenderStrategy::drawRectBackground(Position offset, const Size& size
 }
 
 Blend2DRenderBackend::Blend2DRenderBackend(Size size)
+    : _renderer(_rendererImpl)
 {
     resize(size);
 }
@@ -231,20 +232,20 @@ void Blend2DRenderBackend::resize(Size size)
 void Blend2DRenderBackend::beginFrame(Color clearColor)
 {
     _context = BLContext(_image);
-    _strategy.setContext(&_context);
-    _strategy.drawWindow(_size, clearColor);
+    _rendererImpl.setContext(&_context);
+    _renderer.drawWindow(_size, clearColor);
 }
 
 void Blend2DRenderBackend::renderWidget(Widget& widget)
 {
-    widget.setRenderStrategy(_strategy);
+    widget.setRenderer(_renderer);
     widget.render({0, 0});
 }
 
 void Blend2DRenderBackend::endFrame()
 {
     _context.end();
-    _strategy.setContext(nullptr);
+    _rendererImpl.setContext(nullptr);
     _image.getData(&_imageData);
 }
 

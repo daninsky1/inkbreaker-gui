@@ -54,8 +54,8 @@ set(SOURCES
         src/calculator.h
         src/overlay.cpp
         src/overlay.h
-        src/render_strategy.cpp
-        src/render_strategy.h
+        src/renderer.cpp
+        src/renderer.h
         src/render_backend.h
         src/blend2d_render_backend.cpp
         src/blend2d_render_backend.h

@@ -10,7 +10,7 @@
 
 namespace ui
 {
-class RenderStrategy;
+class Renderer;
 
 /**
  * @class Widget
@@ -48,8 +48,8 @@ public:
     void setSize(Size size) { _size = size; };
     Widget* getParent() const { return _parent; }
     virtual void setParent(Widget* parent) { _parent = parent; }
-    void setRenderStrategy(RenderStrategy& renderStrategy) { _renderStrategy = &renderStrategy; }
-    RenderStrategy& getRenderStrategy() const;
+    void setRenderer(Renderer& renderer) { _renderer = &renderer; }
+    Renderer& getRenderer() const;
 
     /**
      * Normalize the widget's size based on the given constraints
@@ -97,10 +97,10 @@ public:
     virtual Size layout(const BoxConstraints& boxConstraints) = 0;
 
     /**
-     * Renders the widget using the active render strategy.
+     * Renders the widget using the active renderer.
      *
      * This method should be overridden by concrete subclasses to perform
-     * custom drawing logic using the configured RenderStrategy.
+     * custom drawing logic using the configured Renderer.
      *
      * The `offsetX` and `offsetY` parameters represent the absolute position
      * offset of the widget relative to its parent or the root canvas. These
@@ -117,7 +117,7 @@ protected:
     Size _size = Size{0, 0};        // Size of the widget, used for layout calculations
     BoxConstraints _boxConstraints;               // Box constraints for the widget's size and position
     Widget* _parent = nullptr;                  // The parent widget, if is nullptr assumes it's the root widget
-    RenderStrategy* _renderStrategy = nullptr;  // Drawing backend/strategy used by this widget
+    Renderer* _renderer = nullptr;  // Drawing backend used by this widget
 
     // NOTE(Daniel S): Not used bellow
     bool _focused = false;                      // Indicates if the widget is focused

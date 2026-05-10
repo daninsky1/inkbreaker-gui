@@ -4,7 +4,7 @@
 
 #include "align.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui
 {
@@ -75,7 +75,7 @@ Size Align::layout(const BoxConstraints& constraint)
 
 void Align::render(Position offset)
 {
-    getRenderStrategy().drawAlign(offset, _size, _color);
+    getRenderer().drawAlign(offset, _size, _color);
 
     if (_child != nullptr) {
         _child->render(_childPosition.add(offset));

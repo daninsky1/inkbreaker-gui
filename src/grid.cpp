@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui {
 
@@ -74,7 +74,7 @@ Size Grid::layout(const BoxConstraints& boxConstraints)
 
 void Grid::render(Position offset)
 {
-    getRenderStrategy().drawGrid(offset, _size, _color);
+    getRenderer().drawGrid(offset, _size, _color);
 
     for (size_t index = 0; index < _children.size(); ++index) {
         if (_children[index] != nullptr && index < _childPositions.size()) {

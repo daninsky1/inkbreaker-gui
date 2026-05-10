@@ -8,7 +8,7 @@
 
 #include <SDL3/SDL_mouse.h>
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui {
 
@@ -64,7 +64,7 @@ Size Button::layout(const BoxConstraints& boxConstraints)
 
 void Button::render(Position offset)
 {
-    getRenderStrategy().drawButton(offset, _size, currentColor(), _borderColor);
+    getRenderer().drawButton(offset, _size, currentColor(), _borderColor);
 
     if (_child != nullptr) {
         _child->render(offset.add(_childPosition));

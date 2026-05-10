@@ -4,7 +4,7 @@
 
 #include "text.h"
 
-#include "render_strategy.h"
+#include "renderer.h"
 
 namespace ui {
 
@@ -16,13 +16,13 @@ Text::Text(std::string value)
 
 Size Text::layout(const BoxConstraints& boxConstraints)
 {
-    _size = getRenderStrategy().measureText(_value, _fontSize, _fontFilepath);
+    _size = getRenderer().measureText(_value, _fontSize, _fontFilepath);
     return normalize(boxConstraints);
 }
 
 void Text::render(Position offset)
 {
-    getRenderStrategy().drawText(
+    getRenderer().drawText(
         offset,
         _size,
         _value,

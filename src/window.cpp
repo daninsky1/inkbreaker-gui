@@ -81,7 +81,7 @@ void Window::render(Position offset)
 
 void Window::update() {
     if (_child != nullptr) {
-        _child->setRenderStrategy(_renderBackend->strategy());
+        _child->setRenderer(_renderBackend->renderer());
         _child->layout(_boxConstraints);
     }
 }
