@@ -55,8 +55,6 @@ set(INKBREAKER_GUI_SOURCES
         src/window.h
         src/container.cpp
         src/container.h
-        src/flex_container.cpp
-        src/flex_container.h
         src/center.cpp
         src/center.h
         src/align.cpp
