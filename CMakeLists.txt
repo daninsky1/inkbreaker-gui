@@ -52,6 +52,8 @@ endif()
 set(INKBREAKER_GUI_SOURCES
         src/framework.cpp
         src/framework.h
+        src/sdl_render_host.cpp
+        src/sdl_render_host.h
         src/widget.cpp
         src/window.cpp
         src/window.h

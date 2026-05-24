@@ -564,7 +564,7 @@ public:
             "Button 01",
             "Counter Button"
         };
-        SDL_SetWindowTitle(_window, std::format("Examples. {}", examplesDescriptions[0]).c_str());
+        setTitle(std::format("Examples. {}", examplesDescriptions[0]));
         examples = {
             example1(),
             example2(),
@@ -643,7 +643,7 @@ public:
         std::cout << currentExample << std::endl;
 
         _child = examples[currentExample];
-        SDL_SetWindowTitle(_window, std::format("Examples. {}", examplesDescriptions[currentExample]).c_str());
+        setTitle(std::format("Examples. {}", examplesDescriptions[currentExample]));
     }
 
     std::vector<Widget*> examples;

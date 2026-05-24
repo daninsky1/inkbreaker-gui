@@ -7,9 +7,10 @@
 #include "widget.h"
 
 #include <SDL3/SDL.h>
-#include <memory>
 
 namespace ui {
+
+class SdlRenderHost;
 
 class Window : public SingleChildWidget
 {
@@ -18,22 +19,27 @@ public:
     ~Window() override;
 
     void setMinimumSize(int32_t width, int32_t height);
-    void update() const;
+    void setTitle(std::string title);
+    const std::string& getTitle() const { return _title; }
+    SDL_WindowFlags getFlags() const { return _flags; }
+    Size getMinimumSize() const { return _minimumSize; }
+    SDL_Window* nativeHandle() const { return _window; }
+    bool getResizeRequest();
 
     Event& eventHandler(Event& event) override;
-    Size layout(const BoxConstraints& constraint) override { return _size; };
+    Size layout(const BoxConstraints& constraint) override;
     void render(gfx::Renderer* renderer, Position offset) override;
 protected:
+    friend class SdlRenderHost;
+
+    void attachNativeWindow(SDL_Window* window);
+    void detachNativeWindow(SDL_Window* window);
+
     std::string _title;
     SDL_WindowFlags _flags;
+    Size _minimumSize = {0, 0};
     SDL_Window* _window = nullptr;
-    SDL_Renderer* _sdlRenderer = nullptr;
-    SDL_Surface* _sdlSurface = nullptr;
-    std::shared_ptr<gfx::Surface> _surface;
-    gfx::Renderer* _renderer = nullptr;
     gfx::Color _color = gfx::Colors::GRAY;
-    SDL_Texture* _texture{};
-    void setRenderSurface();
 };
 
 } // ui

@@ -1,11 +1,15 @@
 #include "framework.h"
 
 #include <SDL3/SDL.h>
+#include <memory>
+
+#include "sdl_render_host.h"
 
 namespace ui {
 namespace {
 
 Window* rootWindow = nullptr;
+std::unique_ptr<SdlRenderHost> renderHost;
 
 bool assertRootWindow()
 {
@@ -16,10 +20,19 @@ bool assertRootWindow()
     return true;
 }
 
-void updateAndRender(Window& window, uint64_t startTime)
+bool assertRenderHost()
 {
-    window.update();
-    window.render(nullptr, {0, 0});
+    if (renderHost == nullptr) {
+        SDL_Log("There is no render host defined.");
+        return false;
+    }
+    return true;
+}
+
+void updateAndRender(Window& window, SdlRenderHost& host, uint64_t startTime)
+{
+    window.layout(BoxConstraints::tight(window.getSize()));
+    host.renderFrame(window);
 
     const uint64_t elapsedTime = SDL_GetTicks() - startTime;
     if (elapsedTime < FRAME_DURATION_MS) {
@@ -31,20 +44,26 @@ void updateAndRender(Window& window, uint64_t startTime)
 
 int runApplication(Window& rootWindow)
 {
-    bool running = true;
-    while (running) {
-        const uint64_t startTime = SDL_GetTicks();
+    {
+        SdlRenderHost host(rootWindow);
+        bool running = true;
+        while (running) {
+            const uint64_t startTime = SDL_GetTicks();
 
-        Event event;
-        while (SDL_PollEvent(&event.sdlEvent)) {
-            if (event.sdlEvent.type == SDL_EVENT_QUIT) {
-                running = false;
+            SDL_Event sdlEvent;
+            while (SDL_PollEvent(&sdlEvent)) {
+                Event event;
+                event.sdlEvent = sdlEvent;
+                if (event.sdlEvent.type == SDL_EVENT_QUIT) {
+                    running = false;
+                }
+
+                rootWindow.eventHandler(event);
+                host.resize(rootWindow.getSize());
             }
 
-            rootWindow.eventHandler(event);
+            updateAndRender(rootWindow, host, startTime);
         }
-
-        updateAndRender(rootWindow, startTime);
     }
 
     SDL_Quit();
@@ -54,6 +73,10 @@ int runApplication(Window& rootWindow)
 void setRootWindow(Window* window)
 {
     rootWindow = window;
+    renderHost.reset();
+    if (rootWindow != nullptr) {
+        renderHost = std::make_unique<SdlRenderHost>(*rootWindow);
+    }
 }
 
 Window* getRootWindow()
@@ -71,6 +94,9 @@ SDL_AppResult handleAppEvent(SDL_Event* sdlEvent)
     if (!assertRootWindow()) {
         return SDL_APP_FAILURE;
     }
+    if (!assertRenderHost()) {
+        return SDL_APP_FAILURE;
+    }
 
     Event event;
     event.sdlEvent = *sdlEvent;
@@ -80,6 +106,7 @@ SDL_AppResult handleAppEvent(SDL_Event* sdlEvent)
     }
 
     rootWindow->eventHandler(event);
+    renderHost->resize(rootWindow->getSize());
     return SDL_APP_CONTINUE;
 }
 
@@ -88,8 +115,11 @@ SDL_AppResult handleAppIterate()
     if (!assertRootWindow()) {
         return SDL_APP_FAILURE;
     }
+    if (!assertRenderHost()) {
+        return SDL_APP_FAILURE;
+    }
 
-    updateAndRender(*rootWindow, SDL_GetTicks());
+    updateAndRender(*rootWindow, *renderHost, SDL_GetTicks());
     return SDL_APP_CONTINUE;
 }
 
@@ -97,6 +127,7 @@ void handleAppQuit(SDL_AppResult result)
 {
     (void)result;
 
+    renderHost.reset();
     delete rootWindow;
     rootWindow = nullptr;
     SDL_Quit();
