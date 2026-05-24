@@ -60,23 +60,23 @@ Size Button::layout(const BoxConstraints& boxConstraints)
     return normalizedSize;
 }
 
-void Button::render(BLContext& context, Position offset)
+void Button::render(gfx::Renderer* renderer, Position offset)
 {
     if (_size.width <= 0 || _size.height <= 0) {
         return;
     }
 
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRoundRect(BLRoundRect{0.0, 0.0, static_cast<double>(_size.width), static_cast<double>(_size.height), 4.0}, currentColor());
-    if (_size.width > 1 && _size.height > 1) {
-        context.strokeRoundRect(BLRoundRect{0.5, 0.5, static_cast<double>(_size.width) - 1.0, static_cast<double>(_size.height) - 1.0, 4.0}, _borderColor);
-    }
-    context.restore();
+    renderer->save();
+    renderer->translate(offset.x, offset.y);
+    renderer->clipRect(gfx::Rect{0, 0, _size.width, _size.height});
+    renderer->drawRect(
+        gfx::Rect{0, 0, _size.width, _size.height},
+        gfx::Paint::create().setStyle(gfx::Style::FILL_STYLE).setColor(currentColor())
+    );
+    renderer->restore();
 
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(renderer, offset.add(_childPosition));
     }
 }
 
@@ -123,7 +123,7 @@ bool Button::contains(Position position) const
            position.y < _size.height;
 }
 
-BLRgba32 Button::currentColor() const
+gfx::Color Button::currentColor() const
 {
     if (_pressed) {
         return _pressedColor;

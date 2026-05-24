@@ -23,7 +23,7 @@ public:
     }
 
     Size layout(const BoxConstraints& boxConstraints) override;
-    void render(BLContext& context, Position offset) override;
+    void render(gfx::Renderer* renderer, Position offset) override;
 
 protected:
     Alignment _alignment = Alignment::Center;

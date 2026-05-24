@@ -70,21 +70,24 @@ Size Grid::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void Grid::render(BLContext& context, Position offset)
+void Grid::render(gfx::Renderer* renderer, Position offset)
 {
     if (_size.width <= 0 || _size.height <= 0) {
         return;
     }
 
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
-    context.restore();
+    renderer->save();
+    renderer->translate(offset.x, offset.y);
+    renderer->clipRect(gfx::Rect{0, 0, _size.width, _size.height});
+    renderer->drawRect(
+        gfx::Rect{0, 0, _size.width, _size.height},
+        gfx::Paint::create().setStyle(gfx::Style::FILL_STYLE).setColor(_color)
+    );
+    renderer->restore();
 
     for (size_t index = 0; index < _children.size(); ++index) {
         if (_children[index] != nullptr && index < _childPositions.size()) {
-            _children[index]->render(context, offset.add(_childPositions[index]));
+            _children[index]->render(renderer, offset.add(_childPositions[index]));
         }
     }
 }

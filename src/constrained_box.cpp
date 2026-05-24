@@ -17,10 +17,10 @@ Size ConstrainedBox::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void ConstrainedBox::render(BLContext& context, Position offset)
+void ConstrainedBox::render(gfx::Renderer* renderer, Position offset)
 {
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(renderer, offset.add(_childPosition));
     }
 }
 

@@ -13,13 +13,13 @@ class Center : public SingleChildWidget {
 public:
     Center();
     Size layout(const BoxConstraints& constraint) override;
-    void setColor(BLRgba32 color) {
+    void setColor(gfx::Color color) {
         _color = color;
     }
 
-    void render(BLContext& context, Position offset) override;
+    void render(gfx::Renderer* renderer, Position offset) override;
 protected:
-    BLRgba32 _color = Colors::WHITE;
+    gfx::Color _color = gfx::Colors::WHITE;
 };
 
 } // ui

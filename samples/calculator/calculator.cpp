@@ -20,21 +20,21 @@
 
 namespace {
 
-constexpr BLRgba32 Background{32, 34, 37, 255};
-constexpr BLRgba32 Panel{42, 44, 48, 255};
-constexpr BLRgba32 DigitButton{58, 61, 66, 255};
-constexpr BLRgba32 DigitButtonHover{68, 72, 78, 255};
-constexpr BLRgba32 DigitButtonPressed{76, 81, 88, 255};
-constexpr BLRgba32 OperatorButton{69, 74, 84, 255};
-constexpr BLRgba32 OperatorButtonHover{83, 89, 101, 255};
-constexpr BLRgba32 OperatorButtonPressed{92, 99, 113, 255};
-constexpr BLRgba32 AccentButton{53, 132, 228, 255};
-constexpr BLRgba32 AccentButtonHover{68, 145, 238, 255};
-constexpr BLRgba32 AccentButtonPressed{28, 113, 216, 255};
-constexpr BLRgba32 UtilityButton{49, 51, 56, 255};
-constexpr BLRgba32 UtilityButtonHover{61, 64, 70, 255};
-constexpr BLRgba32 UtilityButtonPressed{69, 73, 80, 255};
-constexpr BLRgba32 TextPrimary{246, 245, 244, 255};
+constexpr gfx::Color Background{32, 34, 37, 255};
+constexpr gfx::Color Panel{42, 44, 48, 255};
+constexpr gfx::Color DigitButton{58, 61, 66, 255};
+constexpr gfx::Color DigitButtonHover{68, 72, 78, 255};
+constexpr gfx::Color DigitButtonPressed{76, 81, 88, 255};
+constexpr gfx::Color OperatorButton{69, 74, 84, 255};
+constexpr gfx::Color OperatorButtonHover{83, 89, 101, 255};
+constexpr gfx::Color OperatorButtonPressed{92, 99, 113, 255};
+constexpr gfx::Color AccentButton{53, 132, 228, 255};
+constexpr gfx::Color AccentButtonHover{68, 145, 238, 255};
+constexpr gfx::Color AccentButtonPressed{28, 113, 216, 255};
+constexpr gfx::Color UtilityButton{49, 51, 56, 255};
+constexpr gfx::Color UtilityButtonHover{61, 64, 70, 255};
+constexpr gfx::Color UtilityButtonPressed{69, 73, 80, 255};
+constexpr gfx::Color TextPrimary{246, 245, 244, 255};
 constexpr const char* RegularFont = "resources/fonts/roboto/static/Roboto-Regular.ttf";
 constexpr const char* BoldFont = "resources/fonts/roboto/static/Roboto-Bold.ttf";
 
@@ -70,10 +70,10 @@ Size CalculatorWidget::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void CalculatorWidget::render(BLContext& context, Position offset)
+void CalculatorWidget::render(gfx::Renderer* renderer, Position offset)
 {
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(renderer, offset.add(_childPosition));
     }
 }
 

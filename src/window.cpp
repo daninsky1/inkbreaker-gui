@@ -17,6 +17,27 @@ Window::Window(std::string title, int32_t w, int32_t h, SDL_WindowFlags flags)
     setRenderSurface();
 }
 
+Window::~Window()
+{
+    if (_renderer != nullptr) {
+        _renderer->releaseRenderTarget();
+        delete _renderer;
+        _renderer = nullptr;
+    }
+    if (_texture != nullptr) {
+        SDL_DestroyTexture(_texture);
+        _texture = nullptr;
+    }
+    if (_sdlRenderer != nullptr) {
+        SDL_DestroyRenderer(_sdlRenderer);
+        _sdlRenderer = nullptr;
+    }
+    if (_window != nullptr) {
+        SDL_DestroyWindow(_window);
+        _window = nullptr;
+    }
+}
+
 void Window::setRenderSurface()
 {
     int w, h;
@@ -25,8 +46,16 @@ void Window::setRenderSurface()
         return;
     }
 
-    _image = BLImage(w, h, BL_FORMAT_PRGB32);
-    _image.getData(&_imageData);
+    gfx::ImageInfo info{.dimension = {w, h}};
+    _surface = gfx::Surface::create(info);
+
+    if (_renderer == nullptr) {
+        _renderer = gfx::Renderer::create();
+    } else {
+        _renderer->releaseRenderTarget();
+    }
+    _renderer->bindRenderTarget(_surface);
+    _renderer->clear(_color);
 
     if (_texture != nullptr) {
         SDL_DestroyTexture(_texture);
@@ -51,9 +80,9 @@ void Window::setMinimumSize(int32_t width, int32_t height)
     }
 }
 
-void Window::render(BLContext& context, Position offset)
+void Window::render(gfx::Renderer* renderer, Position offset)
 {
-    (void)context;
+    (void)renderer;
     (void)offset;
 
     if (_child == nullptr) {
@@ -61,14 +90,10 @@ void Window::render(BLContext& context, Position offset)
         return;
     }
 
-    BLContext childContext(_image);
-    childContext.fillAll(_color);
-    _child->render(childContext, {0, 0});
-    childContext.end();
+    _renderer->clear(_color);
+    _child->render(_renderer, {0, 0});
 
-    _image.getData(&_imageData);
-
-    if (!SDL_UpdateTexture(_texture, nullptr, _imageData.pixelData, static_cast<int>(_imageData.stride))) {
+    if (!SDL_UpdateTexture(_texture, nullptr, _surface->getData(), _surface->getPitch())) {
         SDL_Log("Failed to update texture: %s", SDL_GetError());
         return;
     }

@@ -18,19 +18,19 @@ public:
     Container()
         : _margin(0.0), _padding(0, 0, 0, 0) { }
     
-    void setColor(BLRgba32 color) { _backgroundColor = color; }
-    BLRgba32 getColor() const { return _backgroundColor; }
+    void setColor(gfx::Color color) { _backgroundColor = color; }
+    gfx::Color getColor() const { return _backgroundColor; }
     void setMargin(const css::Margin& margin);
     const css::Margin& getMargin() const;
     void setPadding(const BoxSpace padding);
     BoxSpace getPadding() const;
 
     Size layout(const BoxConstraints& constraint) override;
-    void render(BLContext& context, Position offset) override;
+    void render(gfx::Renderer* renderer, Position offset) override;
 private:
     css::Margin _margin;
     BoxSpace _padding;
-    BLRgba32 _backgroundColor = Colors::GRAY;
+    gfx::Color _backgroundColor = gfx::Colors::GRAY;
 };
 
 }

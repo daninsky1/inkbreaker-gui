@@ -15,13 +15,13 @@ public:
     Padding();
     Padding(uint32_t top, uint32_t left, uint32_t bottom, uint32_t right);
     Size layout(const BoxConstraints& constraint) override;
-    void render(BLContext& context, Position offset) override;
+    void render(gfx::Renderer* renderer, Position offset) override;
 
-    void setColor(BLRgba32 color) { _color = color; }
+    void setColor(gfx::Color color) { _color = color; }
     void setPadding(BoxSpace padding) { _padding = padding; }
     BoxSpace getPadding() const { return _padding; }
 protected:
     BoxSpace _padding = {0, 0, 0, 0};
-    BLRgba32 _color = Colors::WHITE;
+    gfx::Color _color = gfx::Colors::WHITE;
 };
 } // ui

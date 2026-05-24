@@ -4,6 +4,7 @@
 #pragma once
 #include <concepts>
 #include <cinttypes>
+#include <type_traits>
 
 namespace gfx
 {

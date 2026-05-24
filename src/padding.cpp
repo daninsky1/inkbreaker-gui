@@ -50,20 +50,23 @@ Size Padding::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Padding::render(BLContext& context, Position offset)
+void Padding::render(gfx::Renderer* renderer, Position offset)
 {
     if (_size.width <= 0 || _size.height <= 0) {
         return;
     }
 
-    context.save();
-    context.translate(offset.x, offset.y);
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
-    context.restore();
+    renderer->save();
+    renderer->translate(offset.x, offset.y);
+    renderer->clipRect(gfx::Rect{0, 0, _size.width, _size.height});
+    renderer->drawRect(
+        gfx::Rect{0, 0, _size.width, _size.height},
+        gfx::Paint::create().setStyle(gfx::Style::FILL_STYLE).setColor(_color)
+    );
+    renderer->restore();
 
     if (_child != nullptr) {
-        _child->render(context, offset.add(_childPosition));
+        _child->render(renderer, offset.add(_childPosition));
     }
 }
 } // ui

@@ -30,20 +30,23 @@ Size Center::layout(const BoxConstraints& constraint)
     return normalize(constraint);
 }
 
-void Center::render(BLContext& context, Position offset)
+void Center::render(gfx::Renderer* renderer, Position offset)
 {
-    context.save();
+    renderer->save();
 
-    context.translate(offset.x, offset.x);
+    renderer->translate(offset.x, offset.y);
 
-    context.clipToRect(BLRectI{0, 0, _size.width, _size.height});
+    renderer->clipRect(gfx::Rect{0, 0, _size.width, _size.height});
 
-    context.fillRect(BLRectI{0, 0, _size.width, _size.height}, _color);
+    renderer->drawRect(
+        gfx::Rect{0, 0, _size.width, _size.height},
+        gfx::Paint::create().setStyle(gfx::Style::FILL_STYLE).setColor(_color)
+    );
 
-    context.restore();
+    renderer->restore();
 
     if (_child != nullptr) {
-        _child->render(context, _childPosition.add(offset));
+        _child->render(renderer, _childPosition.add(offset));
     }
 }
 

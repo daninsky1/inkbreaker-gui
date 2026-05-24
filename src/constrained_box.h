@@ -17,7 +17,7 @@ public:
     }
 
     Size layout(const BoxConstraints& boxConstraints);
-    void render(BLContext& context, Position offset);
+    void render(gfx::Renderer* renderer, Position offset);
 
 protected:
 

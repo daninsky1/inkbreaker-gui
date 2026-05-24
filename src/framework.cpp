@@ -19,8 +19,7 @@ bool assertRootWindow()
 void updateAndRender(Window& window, uint64_t startTime)
 {
     window.update();
-    BLContext context;
-    window.render(context, {0, 0});
+    window.render(nullptr, {0, 0});
 
     const uint64_t elapsedTime = SDL_GetTicks() - startTime;
     if (elapsedTime < FRAME_DURATION_MS) {

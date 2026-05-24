@@ -24,11 +24,11 @@ Size Overlay::layout(const BoxConstraints& boxConstraints)
     return normalize(boxConstraints);
 }
 
-void Overlay::render(BLContext& context, Position offset)
+void Overlay::render(gfx::Renderer* renderer, Position offset)
 {
     for (auto* child : _children) {
         if (child != nullptr) {
-            child->render(context, offset);
+            child->render(renderer, offset);
         }
     }
 }
